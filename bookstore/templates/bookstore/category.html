@@ -1,0 +1,9 @@
+<p>{{cat}}</p>
+<ul>
+{% for book in book %}
+<li>
+<p><a href="/bookstore/{{book.id}}">{{book.title}}</p>
+</li>
+{% endfor %}
+</ul>
+

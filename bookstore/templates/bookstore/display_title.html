@@ -1,0 +1,80 @@
+<style>
+input {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+
+    background-color: white; 
+    color: black; 
+    border: 2px solid #008CBA;
+}
+
+input:hover {
+    background-color: #008CBA;
+    color: white;
+}
+
+
+</style>
+
+
+<p>{{book_name.id}}</p>
+
+<p>1title : {{book_name}}</p>
+
+<p>2author : {{book_name.author}}</p>
+
+
+
+{% if book_review %}
+
+<p>average rating : {{avg_rating}}</p>
+
+{% for review in book_review %}
+        
+<p>3review : {{review.review_message}}</p>
+
+{% endfor %}
+
+{% else %}
+    <p>3review : ยังไม่มีรีวิวสำหรับหนังสือเล่มนี้</p>
+{% endif %}
+
+
+<form action="{% url 'review' book_name.id %}" method="post">
+    {% csrf_token %}
+    <p>review box :</p>
+    <input type="text" name="review_message" /><br><br>
+    <p>rating :</p>
+    <input type="radio" name= "rating"  value="1" />
+         <label for="1">1</label>
+         <input type="radio" name= "rating"  value="2" />
+         <label for="2">2</label>
+         <input type="radio" name= "rating"  value="3" />
+         <label for="3">3</label>
+         <input type="radio" name= "rating"  value="4" />
+         <label for="4">4</label>
+         <input type="radio" name= "rating"  value="5" />
+         <label for="5">5</label>
+    <br><br> <input type="submit" name="review" value="review" /><br><br> 
+</form>
+
+<p>4available : {{book_name.available}}</p>
+
+{% if book_name.available %}
+    <form action="{% url 'reserve' book_name.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" name="reserve" value="จอง" /><br><br>
+    </form>
+{% endif %}
+
+

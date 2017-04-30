@@ -1,0 +1,9 @@
+<p>all reviews</p>
+
+
+{% for review in allreviews %}
+<li>
+<a href="/bookstore/{{review.book.id}}">{{review.book}}
+</li><br>
+{% endfor %}
+
