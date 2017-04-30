@@ -9,6 +9,8 @@ from .models import Book,Review,User,ImageBook
 from django.db.models import Count,Max,Avg
 import datetime
 
+#def home(request):
+#    return render(request, 'home.html')
 
 def home(request):
     num_books = Book.objects.aggregate(Max('id')).get('id__max', 0.00)
@@ -17,7 +19,7 @@ def home(request):
     avg_rating2 = []
     new = []
     #avg_rating = Review.objects.values('id')(Avg('rating'))
-    for i in range (1,num_books-1):
+    for i in range (1,(0 if num_books is None else num_books)):
         book_name = Book.objects.filter(id=i)
         avg_rating = Review.objects.filter(book=book_name).aggregate(Avg('rating')).get('rating__avg', 0.00)
         if avg_rating != None :
@@ -26,7 +28,7 @@ def home(request):
    
     top_five_rating = sorted(avg_rating2)[len(avg_rating2)-5:]
     keep = []
-    for i in range(0,5):
+    for i in range(0,len(top_five_rating)):
         keep.append(top_five_rating[4-i]) 
         
     template = loader.get_template('bookstore/home.html')
@@ -35,7 +37,7 @@ def home(request):
         'num_books' : num_books,
         'latest_review' : latest_review,
         'top_five_rating' : keep,
-        'id' :avg_rating2[1]
+        
     }
     return HttpResponse(template.render(context, request))
     

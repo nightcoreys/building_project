@@ -1,0 +1,94 @@
+<html>
+<style>
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: gray;
+}
+</style>
+
+<h1>WELCOME</h1>
+<p1>total book : {{num_books}}</p1>
+
+
+<form action="/bookstore/search/" method="get">
+    {% csrf_token %}
+    <input name="search" id="search" type="text" placeholder="Search">
+    <input name="submit" type="submit" value="Search">
+</form>
+
+
+<p2><b>New Release Books</b></p2>
+<ul>
+{% for book in latest_book %}
+<li>
+<p3><a href="/bookstore/{{book.id}}">{{book.title}}</a></p3>
+</li>
+{% endfor %}
+</ul>
+
+<div class="dropdown">
+  <button class="dropbtn">Category</button>
+  <div class="dropdown-content">
+    <a href="/bookstore/cat/Allbooks">All Books</a>
+    <a href="/bookstore/cat/Comics">Comics</a>
+    <a href="/bookstore/cat/Novel">Novel</a>
+  </div>
+</div>
+
+<p3--1>{{bookid_review}}</p3--1>
+
+<p4><b>Latest Reviews</b></p4>
+<p5><a href="/bookstore/allreviews">see all reviews</p5>
+<ul>
+{% for review in latest_review %}
+<li>
+<p6><a href="/bookstore/{{review.book.id}}">{{review.book}}</p6></a>
+</li>
+{% endfor %}
+</ul>
+
+<p7><b>Top 5 Rating</b></p7>
+{% for t in top_five_rating %}
+<ul><li>
+{{t}}
+</li></ul>
+{% endfor %}
+
+
+</html>
+

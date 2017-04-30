@@ -1,9 +1,42 @@
-<p>{{cat}}</p>
+<style>
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
+</style>
+
 <ul>
-{% for book in book %}
-<li>
-<p><a href="/bookstore/{{book.id}}">{{book.title}}</p>
-</li>
-{% endfor %}
+  <li><a class="active" href="/bookstore/home">Home</a></li>
+  <li><a href="/bookstore/cat/Allbooks">All books</a></li>
+  <li><a href="/bookstore/cat/Comics">Comics</a></li>
+  <li><a href="/bookstore/cat/Novel">Novel</a></li>
 </ul>
+<p>{{cat}}</p>
+
+{% for book in book %}
+
+<p><a href="/bookstore/{{book.id}}">{{book.title}}</p>
+
+{% endfor %}
+
 

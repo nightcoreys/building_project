@@ -16,7 +16,11 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from bookstore import views
+
 urlpatterns = [
     url(r'^bookstore/', include('bookstore.urls')),
     url(r'^admin/', admin.site.urls),
+    
+    url(r'^$', views.home, name='index'),
 ]
