@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <style>
 
 ul {
@@ -42,16 +45,13 @@ input[name=search] {
 
 }
 </style>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            {% block table %}
+            {% endblock %}
+        </div>
+    </div>
 
-<form action="/bookstore/search/" method="get">
-    {% csrf_token %}
-    <input name="search" id="search" type="text" placeholder="Search">
-    
-</form>
-
-
-{% for b in book %}
-        
-<p>{{b.title}}</p>
-
-{% endfor %}
+</div>
+</body>
+</html>

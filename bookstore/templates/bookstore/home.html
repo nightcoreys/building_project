@@ -96,12 +96,14 @@ input[name=search] {
 {% if top_five_rating %}
 {% for t in top_five_rating %}
 
-<p><a href="/bookstore/{{review.book.id}}">{{t}}</a></p>
+<p><a href="/bookstore/{{t.id}}">{{t}}</a></p>
 
 {% endfor %}
 {% endif %}
 </td>
 </tr>
 </table>
+
+
 </html>
 

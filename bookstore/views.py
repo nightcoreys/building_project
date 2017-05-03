@@ -129,7 +129,7 @@ def search(request):
    
     search_query = request.GET['search']
     book = Book.objects.filter(title__contains=search_query)
-    template = loader.get_template('bookstore/searching_book.html')
+    template = loader.get_template('bookstore/category.html')
     context = {
         'book' : book,
     }
