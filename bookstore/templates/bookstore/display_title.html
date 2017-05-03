@@ -59,6 +59,11 @@ input[name=search] {
     transition: width 0.4s ease-in-out;
 }
 
+label {
+  margin-right: 18px;
+}
+
+
 }
 </style>
 
@@ -85,7 +90,7 @@ input[name=search] {
 
 {% if book_review %}
 
-<p>average rating : {{avg_rating}}</p>
+<p>average rating : {{book_name.avg_rating}}</p>
 
 {% for review in book_review %}
         

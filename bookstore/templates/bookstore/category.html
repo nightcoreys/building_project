@@ -271,7 +271,7 @@ element.innerHTML = pagerHtml;
 </ul>
 <p>{{cat}}</p>
 
-
+{% if book %}
 <table id="tablepaging" class="yui" align="center">
 <thead>
 <tr> 
@@ -294,6 +294,9 @@ element.innerHTML = pagerHtml;
 </table> 
 <div id="pageNavPosition" style="padding-top: 20px" align="center">
 </div>
+{% else %}
+Not found a book. Please check book title that you search.
+{% endif %}
 <script type="text/javascript"><!--
 var pager = new Pager('tablepaging', 10);
 pager.init();

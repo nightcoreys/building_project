@@ -1,4 +1,3 @@
-<html>
 <style>
 
 ul {
@@ -59,54 +58,5 @@ input[name=search] {
   
 </ul>
 
-
-<h1 align=center>WELCOME</h1>
-<pre align=center>total book : {{num_books}}</pre>
-
-<table width="100%">
-<tr align=center>
-
-<td>
-
-<br><br><p1><b>New Release Books</b></p1><br><br>
-{% if latest_book %}
-{% for book in latest_book %}
-
-<p><a href="/bookstore/{{book.id}}">{{book.title}}</a></p>
-
-{% endfor %}
-{% endif %}
-</td>
-
-<td>
-<br><br><p4><b>Latest Reviews</b></p4>
-
-{% if latest_review %}
-{% for review in latest_review %}
-
-<p><a href="/bookstore/{{review.book.id}}">{{review.book}}</a></p>
-
-{% endfor %}
-{% endif %}
-
-<br><p5><a href="/bookstore/allreviews">see all reviews</a></p5><br><br>
-
-</td>
-
-<td>
-<br><br><p7><b>Top 5 Rating</b></p7><br><br>
-
-{% if top_five_rating %}
-{% for t in top_five_rating %}
-
-<p><a href="/bookstore/{{t.id}}">{{t}}</a></p>
-
-{% endfor %}
-{% endif %}
-</td>
-</tr>
-</table>
-
-
-</html>
+<p>{{message}}</p>
 
