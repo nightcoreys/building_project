@@ -16,7 +16,7 @@ li {
 li a {
     display: block;
     color: white;
-    text-align: center;
+    text-align: left;
     padding: 14px 16px;
     text-decoration: none;
 }
@@ -24,55 +24,84 @@ li a {
 li a:hover {
     background-color: #111;
 }
+
+input[name=search] {
+    margin: 0 70%;
+    width: 300px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('searchicon.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+}
 </style>
-
-<ul>
-  <li><a class="active" href="#home">Home</a></li>
-  <li><a href="/bookstore/cat/Allbooks">All books</a></li>
-  <li><a href="/bookstore/cat/Comics">Comics</a></li>
-  <li><a href="/bookstore/cat/Novel">Novel</a></li>
-</ul>
-
-
-
-<h1>WELCOME</h1>
-<p1>total book : {{num_books}}</p1>
-
 
 <form action="/bookstore/search/" method="get">
     {% csrf_token %}
     <input name="search" id="search" type="text" placeholder="Search">
-    <input name="submit" type="submit" value="Search">
+    
 </form>
 
 
-<p2><b>New Release Books</b></p2><br><br>
+<ul>
+  <li><a class="active" href="/bookstore/home">Home</a></li>
+  <li><a href="/bookstore/cat/Allbooks">All books</a></li>
+  <li><a href="/bookstore/cat/Comics">Comics</a></li>
+  <li><a href="/bookstore/cat/Novel">Novel</a></li>
+  
+</ul>
 
+
+<h1 align=center>WELCOME</h1>
+<pre align=center>total book : {{num_books}}</pre>
+
+<table width="100%">
+<tr align=center>
+
+<td>
+
+<br><br><p1><b>New Release Books</b></p1><br><br>
+{% if latest_book %}
 {% for book in latest_book %}
 
-<p3><a href="/bookstore/{{book.id}}">{{book.title}}</a></p3><br><br>
+<p><a href="/bookstore/{{book.id}}">{{book.title}}</a></p>
 
 {% endfor %}
+{% endif %}
+</td>
 
-
-
-<p4><b>Latest Reviews</b></p4><br><br>
-<p5><a href="/bookstore/allreviews">see all reviews</p5><br><br>
-
+<td>
+<br><br><p4><b>Latest Reviews</b></p4>
+<p5><a href="/bookstore/allreviews">see all reviews</a></p5><br><br>
+{% if latest_review %}
 {% for review in latest_review %}
 
-<p6><a href="/bookstore/{{review.book.id}}">{{review.book}}</p6></a><br><br>
+<p><a href="/bookstore/{{review.book.id}}">{{review.book}}</a></p>
 
 {% endfor %}
+{% endif %}
+</td>
 
+<td>
+<br><br><p7><b>Top 5 Rating</b></p7><br><br>
 
-<p7><b>Top 5 Rating</b></p7>
+{% if top_five_rating %}
 {% for t in top_five_rating %}
 
-<p>{{t}}</p>
+<p><a href="/bookstore/{{review.book.id}}">{{t}}</a></p>
 
 {% endfor %}
-
-
+{% endif %}
+</td>
+</tr>
+</table>
 </html>
 

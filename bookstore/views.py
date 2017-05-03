@@ -5,38 +5,23 @@ from django.views import generic
 from django.utils import timezone
 from django.http import HttpResponse
 from django.template import loader
-from .models import Book,Review,User,ImageBook
+from .models import Book,Review,User
 from django.db.models import Count,Max,Avg
 import datetime
 
-#def home(request):
-#    return render(request, 'home.html')
 
 def home(request):
     num_books = Book.objects.aggregate(Max('id')).get('id__max', 0.00)
     latest_book = Book.objects.all().order_by('-id')[:5]
     latest_review = Review.objects.all().order_by('-id')[:5]
-    avg_rating2 = []
-    new = []
-    #avg_rating = Review.objects.values('id')(Avg('rating'))
-    for i in range (1,(0 if num_books is None else num_books)):
-        book_name = Book.objects.filter(id=i)
-        avg_rating = Review.objects.filter(book=book_name).aggregate(Avg('rating')).get('rating__avg', 0.00)
-        if avg_rating != None :
-            avg_rating2.append(avg_rating)  
-            
-   
-    top_five_rating = sorted(avg_rating2)[len(avg_rating2)-5:]
-    keep = []
-    for i in range(0,len(top_five_rating)):
-        keep.append(top_five_rating[4-i]) 
+    top5book = Book.objects.all().order_by('-avg_rating')[:5]
         
     template = loader.get_template('bookstore/home.html')
     context = {
         'latest_book' : latest_book,
         'num_books' : num_books,
         'latest_review' : latest_review,
-        'top_five_rating' : keep,
+        'top_five_rating' : top5book,
         
     }
     return HttpResponse(template.render(context, request))
@@ -60,14 +45,14 @@ def display_title(request,book_id):
     book_name = get_object_or_404(Book, pk=book_id)
     book_review = Review.objects.filter(book=book_name)
     avg_rating = Review.objects.filter(book=book_name).aggregate(Avg('rating')).get('rating__avg', 0.00)
-
+    img = Book.objects.filter(title=book_name)
 
     template = loader.get_template('bookstore/display_title.html')
     context = {
         'book_name' : book_name,
         'book_review' : book_review,
         'avg_rating' : avg_rating,
-        
+        'img' : img,
        
     }
     return HttpResponse(template.render(context, request))
@@ -84,13 +69,20 @@ def review(request,book_id):
     book_name = Book.objects.filter(id=book_id)
     new_review_message = request.POST.get('review_message')
     new_rating = request.POST.get('rating')
+    book_review = Review.objects.filter(book=book_name)
+
+    
 
     if (new_review_message != "") and (new_rating != ""):
+        
         for a in book_name: 
 
             new_review = Review(book=a,timestamp=timezone.now(),review_message=new_review_message,rating=new_rating)
             new_review.save()
-        
+
+            avg = Book.objects.filter(id=book_id).update(avg_rating = Review.objects.filter(book=book_name).aggregate(Avg('rating')).get('rating__avg', 0.00))
+    
+    #เดี๋ยวเปลี่ยนเป็น redirec แทน
     template = loader.get_template('bookstore/reserve.html')
     context = {
         

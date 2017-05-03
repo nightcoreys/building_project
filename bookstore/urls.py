@@ -12,5 +12,8 @@ urlpatterns = [
     url(r'^login/$', views.checklogin, name='checklogin'),
     url(r'^allreviews/$', views.display_allreviews, name='review'),
     url(r'^search/$', views.search, name='search'),
+    
+
+
 
 ]

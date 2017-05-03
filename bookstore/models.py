@@ -6,14 +6,16 @@ class Book(models.Model):
     author = models.CharField(max_length=255)
     category = models.CharField(max_length=256, choices=[('Comics', 'Comics'), ('Novel', 'Novel'),('Psychology','Psychology')]) 
     available = models.BooleanField(default=True)
-    
+    avg_rating = models.FloatField(default=0.0)
+    img = models.ImageField(upload_to='media/', null = True)
 
     def __str__(self):
         return self.title
+    
 
-class ImageBook(models.Model):
-    mainimage = models.ImageField(upload_to='img', null = True)
-    image = models.ForeignKey(Book)
+#class ImageBook(models.Model):
+#    mainimage = models.ImageField(upload_to='img', null = True)
+#    image = models.ForeignKey(Book)
 
 class Review(models.Model):
 
@@ -33,6 +35,7 @@ class Review(models.Model):
     def __str__(self):
         return self.book.title
 
+    
 
 class User(models.Model):
     username = models.CharField(max_length=255,primary_key=True)
