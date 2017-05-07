@@ -15,7 +15,8 @@ def home(request):
     latest_book = Book.objects.all().order_by('-id')[:5]
     latest_review = Review.objects.all().order_by('-id')[:5]
     top5book = Book.objects.all().order_by('-avg_rating')[:5]
-        
+    
+    
     template = loader.get_template('bookstore/home.html')
     context = {
         'latest_book' : latest_book,
@@ -43,7 +44,7 @@ def category(request,cat):
 
 def display_title(request,book_id):
     book_name = get_object_or_404(Book, pk=book_id)
-    book_review = Review.objects.filter(book=book_name)
+    book_review = Review.objects.filter(book=book_name).order_by('-timestamp')[:5]
     image = Book.objects.filter(pk=book_id)
   
     

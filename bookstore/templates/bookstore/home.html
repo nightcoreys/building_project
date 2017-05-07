@@ -1,65 +1,5 @@
-<html>
-<style>
-
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-}
-
-li {
-    float: left;
-}
-
-li a {
-    display: block;
-    color: white;
-    text-align: left;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-
-li a:hover {
-    background-color: #111;
-}
-
-input[name=search] {
-    margin: 0 70%;
-    width: 300px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: white;
-    background-image: url('searchicon.png');
-    background-position: 10px 10px; 
-    background-repeat: no-repeat;
-    padding: 12px 20px 12px 40px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-}
-
-}
-</style>
-
-<form action="/bookstore/search/" method="get">
-    {% csrf_token %}
-    <input name="search" id="search" type="text" placeholder="Search">
-    
-</form>
-
-
-<ul>
-  <li><a class="active" href="/bookstore/home">Home</a></li>
-  <li><a href="/bookstore/cat/Allbooks">All books</a></li>
-  <li><a href="/bookstore/cat/Comics">Comics</a></li>
-  <li><a href="/bookstore/cat/Novel">Novel</a></li>
-  
-</ul>
-
-
+{% extends 'bookstore/base.html' %}
+{% block a %}
 <h1 align=center>WELCOME</h1>
 <pre align=center>total book : {{num_books}}</pre>
 
@@ -107,6 +47,4 @@ input[name=search] {
 </tr>
 </table>
 
-
-</html>
-
+{% endblock %}

@@ -7,15 +7,11 @@ class Book(models.Model):
     category = models.CharField(max_length=256, choices=[('Comics', 'Comics'), ('Novel', 'Novel'),('Psychology','Psychology')]) 
     available = models.BooleanField(default=True)
     avg_rating = models.FloatField(default=0.0)
-    img = models.CharField(max_length=100,default="/static/bookstore/images.png")
+    img = models.CharField(max_length=100)
 
     def __str__(self):
         return self.title
     
-
-#class ImageBook(models.Model):
-#    mainimage = models.ImageField(upload_to='img', null = True)
-#    image = models.ForeignKey(Book)
 
 class Review(models.Model):
 
