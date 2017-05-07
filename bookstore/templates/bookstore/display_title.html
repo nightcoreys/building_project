@@ -63,8 +63,15 @@ label {
   margin-right: 18px;
 }
 
-
+img {
+    width: 120px;
+    min-height: 120px;
+    max-height: auto;
+    float: left;
+    margin: 3px;
+    padding: 3px;
 }
+
 </style>
 
 <form action="/bookstore/search/" method="get">
@@ -83,7 +90,7 @@ label {
 
 {% load static %}
 {% for i in image %}
-<img src="{{i.img}}" alt="My image"/>
+<img src="{{i.img}}" alt="My image" />
 {% endfor %}
 <p>title : {{book_name}}</p>
 
