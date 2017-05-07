@@ -7,7 +7,7 @@ class Book(models.Model):
     category = models.CharField(max_length=256, choices=[('Comics', 'Comics'), ('Novel', 'Novel'),('Psychology','Psychology')]) 
     available = models.BooleanField(default=True)
     avg_rating = models.FloatField(default=0.0)
-    img = models.ImageField(upload_to='media/', null = True)
+    img = models.CharField(max_length=100,default="/static/bookstore/images.png")
 
     def __str__(self):
         return self.title

@@ -80,12 +80,14 @@ label {
   <li><a href="/bookstore/cat/Novel">Novel</a></li>
 </ul>
 
-<p>{{book_name.id}}</p>
 
-<p>1title : {{book_name}}</p>
+{% load static %}
+{% for i in image %}
+<img src="{{i.img}}" alt="My image"/>
+{% endfor %}
+<p>title : {{book_name}}</p>
 
-<p>2author : {{book_name.author}}</p>
-
+<p>author : {{book_name.author}}</p>
 
 
 {% if book_review %}
@@ -94,12 +96,12 @@ label {
 
 {% for review in book_review %}
         
-<p>3review : {{review.review_message}}</p>
+<p>review : {{review.review_message}}</p>
 
 {% endfor %}
 
 {% else %}
-    <p>3review : ยังไม่มีรีวิวสำหรับหนังสือเล่มนี้</p>
+    <p>review : ยังไม่มีรีวิวสำหรับหนังสือเล่มนี้</p>
 {% endif %}
 
 

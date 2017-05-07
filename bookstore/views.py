@@ -44,13 +44,14 @@ def category(request,cat):
 def display_title(request,book_id):
     book_name = get_object_or_404(Book, pk=book_id)
     book_review = Review.objects.filter(book=book_name)
+    image = Book.objects.filter(pk=book_id)
   
     
     template = loader.get_template('bookstore/display_title.html')
     context = {
         'book_name' : book_name,
         'book_review' : book_review,
-       
+        'image' : image,
     }
     return HttpResponse(template.render(context, request))
 
