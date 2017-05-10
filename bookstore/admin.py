@@ -1,8 +1,7 @@
 from django.contrib import admin
 
-from .models import Book,Review,User
+from .models import Book,Review
 
 admin.site.register(Book)
 admin.site.register(Review)
-admin.site.register(User)
-#admin.site.register(ImageBook)
+

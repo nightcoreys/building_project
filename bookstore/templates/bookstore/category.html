@@ -31,11 +31,16 @@ border-right: solid 1px #7f7f7f;
 
 
 
+table.yui tr{
+background-color: #fffdf7
+}
+table.yui tr:nth-child(even){background-color: #fccd64}
+
 table.yui th { 
 
 padding: 12px; 
 height: auto; 
-background: #fff; 
+
 }
 
 table.yui th a { 
@@ -62,14 +67,6 @@ font-size:larger;
 font-weight:bold; 
 }
 
-table.yui thead .filter { 
-text-align:right; 
-}
-
-table.yui tfoot { 
-background-color:#fff; 
-text-align:center; 
-}
 
 table.yui .tablesorterPager { 
 padding: 10px 0 10px 0; 
@@ -224,7 +221,7 @@ element.innerHTML = pagerHtml;
 <p>{{cat}}</p>
 
 {% if book %}
-<table id="tablepaging" class="yui" align="center">
+<table id="tablepaging" class="yui" align="center" width=60%>
 <thead>
 <tr> 
 <th>Name</th>

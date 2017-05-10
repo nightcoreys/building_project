@@ -1,6 +1,7 @@
 {% extends 'bookstore/base.html' %}
 {% block a %}
 
+
 <table width="100%">
 <tr align=left>
 
@@ -30,7 +31,7 @@
     <p>review : ยังไม่มีรีวิวสำหรับหนังสือเล่มนี้</p>
 {% endif %}
 </td>
-<td>
+<td >
 <p><b>REVIEW THIS BOOK</b></p>
 <form action="{% url 'review' book_name.id %}" method="post">
     {% csrf_token %}

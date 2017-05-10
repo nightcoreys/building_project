@@ -5,7 +5,6 @@ class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     category = models.CharField(max_length=256, choices=[('Comics', 'Comics'), ('Novel', 'Novel'),('Psychology','Psychology')]) 
-    available = models.BooleanField(default=True)
     avg_rating = models.FloatField(default=0.0)
     img = models.CharField(max_length=100)
 
@@ -33,14 +32,5 @@ class Review(models.Model):
 
     
 
-class User(models.Model):
-    username = models.CharField(max_length=255,primary_key=True)
-    password = models.CharField(max_length=255)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.username
 
 

@@ -1,50 +1,74 @@
 {% extends 'bookstore/base.html' %}
 {% block a %}
 <h1 align=center>WELCOME</h1>
-<pre align=center>total book : {{num_books}}</pre>
+<p align=center>total book : {{num_books}}</p>
 
-<table width="100%">
-<tr align=center>
 
-<td>
 
-<br><br><p1><b>New Release Books</b></p1><br><br>
+<p1><b>New Release</b></p1><br>
+<table align="center" width= 80% >
 {% if latest_book %}
 {% for book in latest_book %}
 
-<p><a href="/bookstore/{{book.id}}">{{book.title}}</a></p>
+<td align=center>
+{% load static %}
+<div class="container">
+<a href="/bookstore/{{book.id}}">
+<img src="{{book.img}}" />
+<p id=text>{{book.title}}</a></p>
+</div>
+
+
+</td>
 
 {% endfor %}
 {% endif %}
-</td>
+</table>
 
-<td>
-<br><br><p4><b>Latest Reviews</b></p4>
 
+
+<br><br><br><p4><b>Latest Reviews</b></p4>
+<table align="center" width= 80%>
 {% if latest_review %}
 {% for review in latest_review %}
 
-<p><a href="/bookstore/{{review.book.id}}">{{review.book}}</a></p>
+<td align=center>
+{% load static %}
+<div class="container">
+<a href="/bookstore/{{review.book.id}}">
+<img src="{{review.book.img}}" />
+<p id=text>{{review.book}}</a></p>
+</div>
 
-{% endfor %}
-{% endif %}
 
-<br><p5><a href="/bookstore/allreviews">see all reviews</a></p5><br><br>
 
 </td>
 
-<td>
-<br><br><p7><b>Top 5 Rating</b></p7><br><br>
+{% endfor %}
+{% endif %}
+</table>
+<br><p5><a href="/bookstore/allreviews">see all reviews</a></p5><br><br>
 
+
+
+
+<br><br><p7><b>Top 5 Rating</b></p7><br><br>
+<table align="center" width= 80%>
 {% if top_five_rating %}
 {% for t in top_five_rating %}
 
-<p><a href="/bookstore/{{t.id}}">{{t}}</a></p>
+<td align=center>
+{% load static %}
+<div class="container">
+<a href="/bookstore/{{t.id}}">
+<img src="{{t.img}}" />
+<p id=text>{{t}}</a></p></td>
+</div>
+
+
 
 {% endfor %}
 {% endif %}
-</td>
-</tr>
 </table>
 
 {% endblock %}

@@ -5,13 +5,13 @@ from django.views import generic
 from django.utils import timezone
 from django.http import HttpResponse
 from django.template import loader
-from .models import Book,Review,User
+from .models import Book,Review
 from django.db.models import Count,Max,Avg
 import datetime
 
 
 def home(request):
-    num_books = Book.objects.aggregate(Max('id')).get('id__max', 0.00)
+    num_books = Book.objects.all().count()
     latest_book = Book.objects.all().order_by('-id')[:5]
     latest_review = Review.objects.all().order_by('-id')[:5]
     top5book = Book.objects.all().order_by('-avg_rating')[:5]
@@ -56,13 +56,6 @@ def display_title(request,book_id):
     }
     return HttpResponse(template.render(context, request))
 
-def reserve(request,book_id):
-    book = Book.objects.filter(id=book_id).update(available = 'False')
-    template = loader.get_template('bookstore/reserve.html')
-    context = {
-        
-    }
-    return HttpResponse(template.render(context, request))
 
 def review(request,book_id):
     book_name = Book.objects.filter(id=book_id)
@@ -92,32 +85,6 @@ def review(request,book_id):
     return HttpResponse(template.render(context, request))
 
  
-def login(request):
-    
-    return render(request,"bookstore/login.html",{})
-
-
-def checklogin(request):
-    check=""
-    username_login = request.POST['uname']
-    password_login = request.POST['password']
-
-    user = User.objects.filter(username=username_login,password=password_login)
-    
-    for u in user:
-        
-        if u != "":
-            check = u
-
-    if check !="":
-        return HttpResponseRedirect('/bookstore/home/')
-            
-    else:
-        template = loader.get_template('bookstore/loginfailed.html')
-        context = {
-        
-        }
-        return HttpResponse(template.render(context, request))
 
 def display_allreviews(request):
     allreviews = latest_review = Review.objects.all().order_by('-id')
@@ -128,13 +95,24 @@ def display_allreviews(request):
     return HttpResponse(template.render(context, request))
 
 def search(request):
-   
-    search_query = request.GET['search']
-    book = Book.objects.filter(title__contains=search_query)
+    if 'tora' in request.GET:
+        tora = request.GET['tora']
+        search_query = request.GET['search']
+        if tora == "title":
+
+        
+           book = Book.objects.filter(title__contains=search_query)
+        elif tora =="author":
+           book = Book.objects.filter(author__contains=search_query)
+    else:
+       book = None
     template = loader.get_template('bookstore/category.html')
     context = {
         'book' : book,
     }
     return HttpResponse(template.render(context, request))
-    #return HttpResponseRedirect(reverse('bookstore', args=(idbook,)))
+
+def about(request):
+    template = loader.get_template('bookstore/about.html')
+    return HttpResponse(template.render({}, request))
 

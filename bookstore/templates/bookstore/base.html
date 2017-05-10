@@ -45,7 +45,7 @@ li a:hover {
     background-color: #111;
 }
 input[name=search] {
-    margin: 0 70%;
+    margin: 0 5%;
     width: 300px;
     box-sizing: border-box;
     border: 2px solid #ccc;
@@ -73,17 +73,50 @@ img {
     margin: 3px;
     padding: 3px;
 }
+.container {
+    width: 160px;
+    height: 120px;
+}
+
+/* resize images */
+.container img {
+    width: 100%;
+    height: 100%;
+}
+
+.container text {
+    text-align: justify; 
+}
+
+
+
+a:link, a:visited {
+    text-decoration: none;
+    
+    
+    
+}
+body {
+    background-color: lightblue;
+}
 
 </style>
 
 <form action="/bookstore/search/" method="get">
     {% csrf_token %}
+    <div style="white-space:nowrap;">         
+    search by: 
+    <input type="radio" name= "tora"  value="title" />
+         <label for="title">title</label>
+         <input type="radio" name= "tora"  value="author" />
+         <label for="author">author</label>
     <input name="search" id="search" type="text" placeholder="Search">
-    
+    </div>
 </form>
 
 <ul>
   <li><a class="active" href="/bookstore/home">Home</a></li>
+  <li><a href="/bookstore/about">About me</a></li>
   <li><a href="/bookstore/cat/Allbooks">All books</a></li>
   <li><a href="/bookstore/cat/Comics">Comics</a></li>
   <li><a href="/bookstore/cat/Novel">Novel</a></li>
