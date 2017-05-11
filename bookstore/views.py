@@ -9,6 +9,7 @@ from .models import Book,Review
 from django.db.models import Count,Max,Avg
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.utils.datastructures import MultiValueDictKeyError
 import datetime
 
 
@@ -124,27 +125,31 @@ def newbook(request):
     
 def addnewbook(request):
     messaage=""
-    if request.method == 'POST' and request.FILES['myfile']:
-        new_title = request.POST.get('title')
-        new_author = request.POST.get('author')
-        new_cat = request.POST.get('cat')
-        myfile = request.FILES['myfile']
+    try:
+        if request.method == 'POST' and request.FILES['myfile']:
+            new_title = request.POST.get('title')
+            new_author = request.POST.get('author')
+            new_cat = request.POST.get('cat')
+            myfile = request.FILES['myfile']
     
-        if (new_title != None) and (new_author != None):
+            if (new_title != "") and (new_author != ""):
         
-            fs = FileSystemStorage()
-            filename = fs.save(myfile.name, myfile)
-            uploaded_file_url = fs.url(filename)
+                fs = FileSystemStorage()
+                filename = fs.save(myfile.name, myfile)
+                uploaded_file_url = fs.url(filename)
 
-            new_book = Book(title=new_title,author=new_author,category=new_cat,avg_rating="0.0",img="/media/"+myfile.name)
-            new_book.save()
+                new_book = Book(title=new_title,author=new_author,category=new_cat,avg_rating="0.0",img="/media/"+myfile.name)
+                new_book.save()
 
         
           
-            message = "successful!!"
+                message = "successful!!"
         
-        else:
-            message = "unsuccessful."
+            else:
+                message = "unsuccessful."
+
+    except MultiValueDictKeyError:
+        message = "unsuccessful."
 
     context = {
         'message' : message,

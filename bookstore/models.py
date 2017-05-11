@@ -2,11 +2,11 @@ from django.db import models
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.CharField(max_length=255)
+    title = models.CharField(max_length=255,null=False)
+    author = models.CharField(max_length=255,null=False)
     category = models.CharField(max_length=256, choices=[('Comics', 'Comics'), ('Novel', 'Novel'),('Psychology','Psychology')]) 
     avg_rating = models.FloatField(default=0.0)
-    img = models.CharField(max_length=100)
+    img = models.CharField(max_length=100,null=False)
 
     def __str__(self):
         return self.title
