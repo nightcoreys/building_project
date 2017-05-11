@@ -1,0 +1,20 @@
+{% extends 'bookstore/base.html' %}
+{% block a %}
+
+<form action="/bookstore/addnewbook/"" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>title :</p>
+    <input type="text" name="title" /><br><br>
+    <p>author :</p>
+    <input type="text" name="author" /><br><br>
+    <p>category :</p>
+    <select name="cat" />
+       <option value="Comics">Comics</option>
+       <option value="Novel">Novel</option>
+       <option value="Psychology">Psychology</option>
+    </select>
+    <input type="file" id="myfile" name="myfile">
+    <br><br> <input type="submit" name="ADD" value="ADD" /><br><br> 
+</form>
+
+{% endblock %}

@@ -1,11 +1,11 @@
 {% extends 'bookstore/base.html' %}
 {% block a %}
-<h1 align=center>WELCOME</h1>
+<h1 align=center>My Bookshelf</h1>
 <p align=center>total book : {{num_books}}</p>
 
 
 
-<p1><b>New Release</b></p1><br>
+<p1><b><font size="5">New Release</font></b></p1><br><br>
 <table align="center" width= 80% >
 {% if latest_book %}
 {% for book in latest_book %}
@@ -15,6 +15,7 @@
 <div class="container">
 <a href="/bookstore/{{book.id}}">
 <img src="{{book.img}}" />
+
 <p id=text>{{book.title}}</a></p>
 </div>
 
@@ -27,7 +28,7 @@
 
 
 
-<br><br><br><p4><b>Latest Reviews</b></p4>
+<br><br><br><p4><b><font size="5">Latest Reviews</font></b></p4><br><br>
 <table align="center" width= 80%>
 {% if latest_review %}
 {% for review in latest_review %}
@@ -47,12 +48,12 @@
 {% endfor %}
 {% endif %}
 </table>
-<br><p5><a href="/bookstore/allreviews">see all reviews</a></p5><br><br>
 
 
 
 
-<br><br><p7><b>Top 5 Rating</b></p7><br><br>
+
+<br><br><p7><b><font size="5">Top 5 Rating</font></b></p7><br><br>
 <table align="center" width= 80%>
 {% if top_five_rating %}
 {% for t in top_five_rating %}

@@ -7,6 +7,8 @@ from django.http import HttpResponse
 from django.template import loader
 from .models import Book,Review
 from django.db.models import Count,Max,Avg
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 import datetime
 
 
@@ -64,7 +66,7 @@ def review(request,book_id):
     book_review = Review.objects.filter(book=book_name)
     message=""
     
-    if (new_review_message != "") and (new_rating != ""):
+    if (new_review_message != None) and (new_rating != None):
         
         for a in book_name: 
 
@@ -116,3 +118,38 @@ def about(request):
     template = loader.get_template('bookstore/about.html')
     return HttpResponse(template.render({}, request))
 
+def newbook(request):
+    template = loader.get_template('bookstore/newbook.html')
+    return HttpResponse(template.render({}, request))
+    
+def addnewbook(request):
+    messaage=""
+    if request.method == 'POST' and request.FILES['myfile']:
+        new_title = request.POST.get('title')
+        new_author = request.POST.get('author')
+        new_cat = request.POST.get('cat')
+        myfile = request.FILES['myfile']
+    
+        if (new_title != None) and (new_author != None):
+        
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
+
+            new_book = Book(title=new_title,author=new_author,category=new_cat,avg_rating="0.0",img="/media/"+myfile.name)
+            new_book.save()
+
+        
+          
+            message = "successful!!"
+        
+        else:
+            message = "unsuccessful."
+
+    context = {
+        'message' : message,
+    }
+    template = loader.get_template('bookstore/addnewbook.html')
+    return HttpResponse(template.render(context, request))
+
+    

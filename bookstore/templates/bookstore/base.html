@@ -72,7 +72,9 @@ img {
     float: left;
     margin: 3px;
     padding: 3px;
+    
 }
+
 .container {
     width: 160px;
     height: 120px;
@@ -106,7 +108,7 @@ body {
     {% csrf_token %}
     <div style="white-space:nowrap;">         
     search by: 
-    <input type="radio" name= "tora"  value="title" />
+    <input type="radio" name= "tora"  value="title"  />
          <label for="title">title</label>
          <input type="radio" name= "tora"  value="author" />
          <label for="author">author</label>
@@ -117,6 +119,7 @@ body {
 <ul>
   <li><a class="active" href="/bookstore/home">Home</a></li>
   <li><a href="/bookstore/about">About me</a></li>
+   <li><a href="/bookstore/newbook">new book</a></li>
   <li><a href="/bookstore/cat/Allbooks">All books</a></li>
   <li><a href="/bookstore/cat/Comics">Comics</a></li>
   <li><a href="/bookstore/cat/Novel">Novel</a></li>

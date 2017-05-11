@@ -10,7 +10,8 @@ urlpatterns = [
     url(r'^allreviews/$', views.display_allreviews, name='review'),
     url(r'^search/$', views.search, name='search'),
     url(r'^about/$', views.about, name='about'),
-
+    url(r'^addnewbook/$', views.addnewbook, name='addnewbook'),
+    url(r'^newbook/$', views.newbook, name='newbook'),
 
 
 ]

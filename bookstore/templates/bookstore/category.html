@@ -218,22 +218,23 @@ element.innerHTML = pagerHtml;
 </script>
 
 
-<p>{{cat}}</p>
 
 {% if book %}
+
+<p align=center><font size="5">My Bookshelf : {{cat}}</font></p>
 <table id="tablepaging" class="yui" align="center" width=60%>
 <thead>
 <tr> 
-<th>Name</th>
-<th>Author</th>
+<th width=30%>Name</th>
+<th width=30%>Author</th>
 </tr>
 </thead>
 <tbody>
 
 {% for book in book %}
 <tr >
-<th><a href="/bookstore/{{book.id}}">{{book.title}}</a> </th>
-<th>{{book.author}}</th>
+<th width=30%><a href="/bookstore/{{book.id}}">{{book.title}}</a> </th>
+<th width=30%>{{book.author}}</th>
 </tr> 
 {% endfor %}
 
@@ -244,7 +245,9 @@ element.innerHTML = pagerHtml;
 <div id="pageNavPosition" style="padding-top: 20px" align="center">
 </div>
 {% else %}
-Not found a book. Please check book title that you search.
+
+<p align=center><font size="5">My Bookshelf : Not found</font></p>
+Not found a book. Please check title or author that you search and confirm to select title or author at search by.
 {% endif %}
 <script type="text/javascript"><!--
 var pager = new Pager('tablepaging', 10);
