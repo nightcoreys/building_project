@@ -16,16 +16,22 @@ import datetime
 def home(request):
     num_books = Book.objects.all().count()
     latest_book = Book.objects.all().order_by('-id')[:5]
-    latest_review = Review.objects.all().order_by('-id')[:5]
+    latest_review =Book.objects.all().order_by('-update_review')[:5]
     top5book = Book.objects.all().order_by('-avg_rating')[:5]
-    
-    
+    num_review=[]
+
+    for i in top5book:
+
+        num_review.append(Review.objects.filter(book=i).count())
+
+    top5rating = zip(top5book, num_review)
     template = loader.get_template('bookstore/home.html')
     context = {
         'latest_book' : latest_book,
         'num_books' : num_books,
         'latest_review' : latest_review,
-        'top_five_rating' : top5book,
+        'top_five_rating' : top5rating,
+        
         
     }
     return HttpResponse(template.render(context, request))
@@ -75,7 +81,7 @@ def review(request,book_id):
             new_review.save()
 
             avg = Book.objects.filter(id=book_id).update(avg_rating = Review.objects.filter(book=book_name).aggregate(Avg('rating')).get('rating__avg', 0.00))
-          
+            update = Book.objects.filter(id=book_id).update(update_review = timezone.now())
         message = "your review successful!!"
         
     else:

@@ -45,7 +45,7 @@ li a:hover {
     background-color: #111;
 }
 input[name=search] {
-    margin: 0 5%;
+    margin: 0 0;
     width: 300px;
     box-sizing: border-box;
     border: 2px solid #ccc;
@@ -103,28 +103,31 @@ body {
 }
 
 </style>
-
-<form action="/bookstore/search/" method="get">
-    {% csrf_token %}
-    <div style="white-space:nowrap;">         
-    search by: 
-    <input type="radio" name= "tora"  value="title"  />
-         <label for="title">title</label>
-         <input type="radio" name= "tora"  value="author" />
-         <label for="author">author</label>
-    <input name="search" id="search" type="text" placeholder="Search">
-    </div>
-</form>
-
 <ul>
   <li><a class="active" href="/bookstore/home">Home</a></li>
-  <li><a href="/bookstore/about">About me</a></li>
+  <li style="float: right;"><a href="/bookstore/about">About</a></li>
    <li><a href="/bookstore/newbook">Add new</a></li>
   <li><a href="/bookstore/cat/Allbooks">All books</a></li>
   <li><a href="/bookstore/cat/Comics">Comics</a></li>
   <li><a href="/bookstore/cat/Novel">Novel</a></li>
   <li><a href="/bookstore/cat/Psychology">Psychology</a></li>
 </ul>
+
+<form action="/bookstore/search/" method="get">
+    {% csrf_token %}
+    <div style="white-space:nowrap; float: right;">         
+    Search by: 
+    <input type="radio" name= "tora"  value="title" checked />
+         <label for="title">Title</label>
+         <input type="radio" name= "tora"  value="author" />
+         <label for="author">Author</label>
+    <input name="search" id="search" type="text" placeholder="Search">
+    </div>
+</form>
+
+<br>
+
+
 
 
 
