@@ -71,9 +71,9 @@ def review(request,book_id):
     new_review_message = request.POST.get('review_message')
     new_rating = request.POST.get('rating')
     book_review = Review.objects.filter(book=book_name)
-    message=""
     
-    if (new_review_message != None) and (new_rating != None):
+    
+    if (new_review_message != "") and (new_rating != None):
         
         for a in book_name: 
 
@@ -82,17 +82,17 @@ def review(request,book_id):
 
             avg = Book.objects.filter(id=book_id).update(avg_rating = Review.objects.filter(book=book_name).aggregate(Avg('rating')).get('rating__avg', 0.00))
             update = Book.objects.filter(id=book_id).update(update_review = timezone.now())
-        message = "your review successful!!"
         
+        return HttpResponseRedirect('/bookstore/%s/' %book_id)
     else:
-        message = "your review unsuccessful."
+       
 
-    context = {
-        'message' : message,
-    }
-    template = loader.get_template('bookstore/review.html')
-    return HttpResponse(template.render(context, request))
-
+        context = {
+            'message' : "your review unsuccessful.",
+        }
+        template = loader.get_template('bookstore/review.html')
+        return HttpResponse(template.render(context, request))
+    
  
 
 def display_allreviews(request):
@@ -140,10 +140,6 @@ def addnewbook(request):
     
             if (new_title != "") and (new_author != ""):
         
-                fs = FileSystemStorage()
-                filename = fs.save(myfile.name, myfile)
-                uploaded_file_url = fs.url(filename)
-
                 new_book = Book(title=new_title,author=new_author,category=new_cat,avg_rating="0.0",img="/media/"+myfile.name)
                 new_book.save()
 

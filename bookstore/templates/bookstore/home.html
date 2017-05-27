@@ -12,12 +12,11 @@
 
 <td align=center>
 {% load static %}
-<div class="container">
+<div class="container-img">
 <a href="/bookstore/{{book.id}}">
 <img src="{{book.img}}" />
 
 <p id=text>{{book.title}}</a></p>
-<p id=text>{{book.release_date}}</p>
 </div>
 
 
@@ -27,6 +26,17 @@
 {% endif %}
 </table>
 
+<br><br><br>
+<table align="center" width= 80%>
+
+{% for book in latest_book %}
+
+<td align=center>
+<p id=text>{{book.release_date|date:"M d, Y"}}</p>
+</td>
+{% endfor %}
+
+</table>
 
 
 <br><br><br><p4><b><font size="5">Latest Reviews</font></b></p4><br><br>
@@ -36,11 +46,10 @@
 
 <td align=center>
 {% load static %}
-<div class="container">
+<div class="container-img">
 <a href="/bookstore/{{book.id}}">
 <img src="{{book.img}}" />
 <p id=text>{{book}}</a></p>
-<p id=text>{{book.update_review}}</p>
 </div>
 
 
@@ -50,7 +59,17 @@
 {% endfor %}
 
 </table>
+<br><br><br>
+<table align="center" width= 80%>
 
+{% for book in latest_review %}
+
+<td align=center>
+<p id=text>{{book.update_review|date:"M d, Y"}}</p>
+</td>
+{% endfor %}
+
+</table>
 
 
 
@@ -62,19 +81,28 @@
 
 <td align=center>
 {% load static %}
-<div class="container">
+<div class="container-img">
 <a href="/bookstore/{{t.id}}">
 <img src="{{t.img}}" />
 <p id=text>{{t}}</a></p>
-<p id=text>{{t.avg_rating|floatformat:2 }}</p>
-<p id=text>{{s}}</p>
+<p id=text>{{t.avg_rating|floatformat:2 }},{{s}}</p>
+
 </td>
 </div>
-
-
-
 {% endfor %}
 {% endif %}
 </table>
+<br><br><br><br><br><br>
+<table align="center" width= 80%>
+
+{% for t,s in top_five_rating2 %}
+
+<td align=center>
+<p id=text>{{t.avg_rating|floatformat:2 }},{{s}}</p>
+</td>
+{% endfor %}
+
+</table>
 
 {% endblock %}
+

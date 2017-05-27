@@ -19,7 +19,7 @@
 
 {% if book_review %}
 
-<p><b>Average rating :</b> {{book_name.avg_rating}}</p>
+<p><b>Average rating :</b> {{book_name.avg_rating|floatformat:2}}</p>
 <p><b>Review :</b></p>
 {% for review in book_review %}
         
