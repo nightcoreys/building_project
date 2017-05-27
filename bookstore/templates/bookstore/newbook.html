@@ -8,13 +8,23 @@
     <p>author :</p>
     <input type="text" name="author" /><br><br>
     <p>category :</p>
-    <select name="cat" />
+    <select name="cat" onchange='checkvalue(this.value)'/>
        <option value="Comics">Comics</option>
        <option value="Novel">Novel</option>
        <option value="Psychology">Psychology</option>
+       <option value="others">others</option>
     </select>
+    <input type="text" name="catt" id="catt" style='display:none'/>
     <input type="file" id="myfile" name="myfile">
     <br><br> <input type="submit" name="ADD" value="ADD" /><br><br> 
 </form>
-
+<script>
+function checkvalue(val)
+{
+    if(val==="others")
+       document.getElementById('catt').style.display='block';
+    else
+       document.getElementById('catt').style.display='none'; 
+}
+</script>
 {% endblock %}

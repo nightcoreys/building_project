@@ -20,6 +20,7 @@
 {% if book_review %}
 
 <p><b>Average rating :</b> {{book_name.avg_rating|floatformat:2}}</p>
+<p>{{message}}<p>
 <p><b>Review :</b></p>
 {% for review in book_review %}
         
@@ -29,6 +30,7 @@
 
 {% else %}
     <p>review : ยังไม่มีรีวิวสำหรับหนังสือเล่มนี้</p>
+    
 {% endif %}
 </td>
 <td width="33.33%" bgcolor="#fccd64">
@@ -52,5 +54,7 @@
 </form>
 </td>
 </table>
+
 {% endblock %}
+
 

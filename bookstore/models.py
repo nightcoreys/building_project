@@ -3,10 +3,17 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=100,null=False)
+
+    def __str__(self):
+        return self.name
+
 class Book(models.Model):
     title = models.CharField(max_length=255,null=False)
     author = models.CharField(max_length=255,null=False)
-    category = models.CharField(max_length=256, choices=[('Comics', 'Comics'), ('Novel', 'Novel'),('Psychology','Psychology')]) 
+    category = models.ForeignKey(Category)
     avg_rating = models.FloatField(default=0.0)
     img = models.CharField(max_length=100,null=False)
     update_review = models.DateTimeField(null=True)
@@ -30,11 +37,8 @@ class Review(models.Model):
             (5, '5'),
         )
     )
-
     def __str__(self):
         return self.book.title
     
-
-
 
 

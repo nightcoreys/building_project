@@ -5,11 +5,12 @@ from django.views import generic
 from django.utils import timezone
 from django.http import HttpResponse
 from django.template import loader
-from .models import Book,Review
+from .models import Book,Review,Category
 from django.db.models import Count,Max,Avg
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils.datastructures import MultiValueDictKeyError
+
 import datetime
 
 
@@ -41,7 +42,7 @@ def category(request,cat):
         book = Book.objects.all().order_by('title')
         
     else:
-        book = Book.objects.filter(category=cat).order_by('title')
+        book = Book.objects.filter(category__name=cat).order_by('title')
 
         
     template = loader.get_template('bookstore/category.html')
@@ -85,13 +86,21 @@ def review(request,book_id):
         
         return HttpResponseRedirect('/bookstore/%s/' %book_id)
     else:
-       
-
+        
+        book_name = get_object_or_404(Book, pk=book_id)
+        book_review = Review.objects.filter(book=book_name).order_by('-timestamp')[:5]
+        image = Book.objects.filter(pk=book_id)
+  
+    
+        template = loader.get_template('bookstore/display_title.html')
         context = {
+            'book_name' : book_name,
+            'book_review' : book_review,
+            'image' : image,
             'message' : "your review unsuccessful.",
         }
-        template = loader.get_template('bookstore/review.html')
         return HttpResponse(template.render(context, request))
+        
     
  
 
@@ -131,18 +140,29 @@ def newbook(request):
     
 def addnewbook(request):
     messaage=""
+    new_cate=""
     try:
         if request.method == 'POST' and request.FILES['myfile']:
             new_title = request.POST.get('title')
             new_author = request.POST.get('author')
             new_cat = request.POST.get('cat')
             myfile = request.FILES['myfile']
-    
-            if (new_title != "") and (new_author != ""):
-        
-                new_book = Book(title=new_title,author=new_author,category=new_cat,avg_rating="0.0",img="/media/"+myfile.name)
-                new_book.save()
+            
 
+            if new_cat=="others":
+                new_cate = request.POST.get('catt')
+                new_category = Category(name=new_cate)
+                new_category.save()
+                
+            else:
+                new_cate = request.POST.get('cat')
+
+            new_cate = Category.objects.filter(name=new_cate)
+
+            if (new_title != "") and (new_author != ""):
+                for a in new_cate:
+                    new_book = Book(title=new_title,author=new_author,category=a,avg_rating="0.0",img="/media/"+myfile.name)
+                    new_book.save()
         
           
                 message = "successful!!"
