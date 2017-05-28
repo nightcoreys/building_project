@@ -149,14 +149,16 @@ body {
   <ui style="float: right;"><a href="/bookstore/about">About</a></ui>
   <a href="/bookstore/newbook">Add new</a>
   <a href="/bookstore/cat/Allbooks">All books</a>
-  <div class="dropdown">
+
+   <div class="dropdown">
     <button class="dropbtn" onclick="myFunction()">Category</button>
     <div class="dropdown-content" id="myDropdown">
-      <a href="/bookstore/cat/Comics">Comics</a></a>
-      <a href="/bookstore/cat/Novel">Novel</a></a>
-      <a href="/bookstore/cat/Psychology">Psychology</a>
+      {% for cat in choice_cat %}
+      <a href="/bookstore/cat/{{cat.name}}">{{cat.name}}</a>
+      {% endfor %}
     </div>
   </div> 
+   
 </div>
 
 

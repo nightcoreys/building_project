@@ -19,6 +19,7 @@ def home(request):
     latest_book = Book.objects.all().order_by('-id')[:5]
     latest_review =Book.objects.all().order_by('-update_review')[:5]
     top5book = Book.objects.all().order_by('-avg_rating')[:5]
+    choice_cat = Category.objects.all()
     num_review=[]
 
     for i in top5book:
@@ -32,12 +33,14 @@ def home(request):
         'num_books' : num_books,
         'latest_review' : latest_review,
         'top_five_rating' : top5rating,
+        'choice_cat' : choice_cat,
         
         
     }
     return HttpResponse(template.render(context, request))
     
 def category(request,cat):
+    choice_cat = Category.objects.all()
     if cat == 'Allbooks':
         book = Book.objects.all().order_by('title')
         
@@ -49,6 +52,7 @@ def category(request,cat):
     context = {
        'book' : book,
        'cat' : cat,
+       'choice_cat' : choice_cat,
     }
     return HttpResponse(template.render(context, request))
 
@@ -56,6 +60,7 @@ def display_title(request,book_id):
     book_name = get_object_or_404(Book, pk=book_id)
     book_review = Review.objects.filter(book=book_name).order_by('-timestamp')[:5]
     image = Book.objects.filter(pk=book_id)
+    choice_cat = Category.objects.all()
   
     
     template = loader.get_template('bookstore/display_title.html')
@@ -63,6 +68,7 @@ def display_title(request,book_id):
         'book_name' : book_name,
         'book_review' : book_review,
         'image' : image,
+        'choice_cat' : choice_cat,
     }
     return HttpResponse(template.render(context, request))
 
@@ -113,6 +119,7 @@ def display_allreviews(request):
     return HttpResponse(template.render(context, request))
 
 def search(request):
+    choice_cat = Category.objects.all()
     if 'tora' in request.GET:
         tora = request.GET['tora']
         search_query = request.GET['search']
@@ -127,18 +134,22 @@ def search(request):
     template = loader.get_template('bookstore/category.html')
     context = {
         'book' : book,
+        'choice_cat':choice_cat,
     }
     return HttpResponse(template.render(context, request))
 
 def about(request):
+    choice_cat = Category.objects.all()
     template = loader.get_template('bookstore/about.html')
-    return HttpResponse(template.render({}, request))
+    return HttpResponse(template.render({'choice_cat':choice_cat,}, request))
 
 def newbook(request):
+    choice_cat = Category.objects.all()
     template = loader.get_template('bookstore/newbook.html')
-    return HttpResponse(template.render({}, request))
+    return HttpResponse(template.render({'choice_cat':choice_cat,}, request))
     
 def addnewbook(request):
+    choice_cat = Category.objects.all()
     messaage=""
     new_cate=""
     try:
@@ -175,6 +186,7 @@ def addnewbook(request):
 
     context = {
         'message' : message,
+        'choice_cat':choice_cat,
     }
     template = loader.get_template('bookstore/addnewbook.html')
     return HttpResponse(template.render(context, request))
