@@ -135,6 +135,7 @@ def search(request):
     context = {
         'book' : book,
         'choice_cat':choice_cat,
+        'search_query' : search_query,
     }
     return HttpResponse(template.render(context, request))
 
@@ -171,12 +172,15 @@ def addnewbook(request):
             new_cate = Category.objects.filter(name=new_cate)
 
             if (new_title != "") and (new_author != ""):
+                fs = FileSystemStorage()
+                filename = fs.save(myfile.name, myfile)
+                uploaded_file_url = fs.url(filename)
                 for a in new_cate:
                     new_book = Book(title=new_title,author=new_author,category=a,avg_rating="0.0",img="/media/"+myfile.name)
                     new_book.save()
         
           
-                message = "successful!!"
+                return HttpResponseRedirect('/bookstore/home/')
         
             else:
                 message = "unsuccessful."

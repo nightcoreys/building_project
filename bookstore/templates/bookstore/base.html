@@ -59,8 +59,8 @@
 .show {
     display: block;
 }
-input {
-    background-color: #4CAF50; /* Green */
+input:not([type=file]) {
+    background-color: #4CAF50; 
     border: none;
     color: white;
     padding: 10px 24px;
@@ -75,10 +75,18 @@ input {
 
     background-color: white; 
     color: black; 
-    border: 2px solid #008CBA;
+    border: 2px solid black;
 }
 
-
+input:[type=file]{
+	width: 100px;
+	height: 100px; 
+        background-color: red;
+   
+	
+	
+	
+}
 input[name=search] {
     margin: 0 0;
     width: 200px;
