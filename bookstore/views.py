@@ -19,7 +19,7 @@ def home(request,user_name):
     latest_book = Book.objects.filter(owner=user_name).order_by('-id')[:5]
     latest_review =Book.objects.filter(owner=user_name).order_by('-update_review')[:5]
     top5book = Book.objects.filter(owner=user_name).order_by('-avg_rating')[:5]
-    choice_cat = Category.objects.all()
+    choice_cat = Category.objects.filter(owner=user_name)
     num_review=[]
 
     for i in top5book:
@@ -168,7 +168,7 @@ def addnewbook(request,user_name):
 
             if new_cat=="others":
                 new_cate = request.POST.get('catt')
-                new_category = Category(name=new_cate)
+                new_category = Category(name=new_cate,owner=user_name)
                 new_category.save()
                 
             else:
