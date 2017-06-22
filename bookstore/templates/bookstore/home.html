@@ -1,52 +1,38 @@
 {% extends 'bookstore/base.html' %}
-
-
 {% block a %}
-
 
 <br><br>
 <h1 align=center>My Bookshelf</h1>
 <p align=center>total book : {{num_books}}</p>
-
-
-
-<p1><b><font size="5">New Release</font></b></p1><br><br>
+<p2><b><font size="5">New Release</font></b></p2><br><br>
 <table align="center" width= 80% >
-{% if latest_book %}
-{% for book in latest_book %}
+    {% if latest_book %}
+    {% for book in latest_book %}
 
-<td align=center>
-{% load static %}
-<div class="container-img">
-<a href="/bookstore/{{book.id}}">
-<img src="{{book.img}}" />
-
-<p id=text>{{book.title}}</a></p>
-<p id=text>Owner date: {{book.release_date|date:"M d, Y"}}</p>
-</div>
-
-
-</td>
-
-{% endfor %}
-{% endif %}
+    <td align=center>
+        {% load static %}
+        <div class="container-img">
+            <a href="/{{user_name}}/{{book.id}}">
+            <img src="{{book.img}}" />
+            <p id=text name={{book.title}}>{{book.title}}</a></p> 
+            <p id=text>Owner date: {{book.release_date|date:"M d, Y"}}</p>
+        </div>
+    </td>
+    {% endfor %}
+    {% endif %}
 </table>
-
 <br><br><br><br><br>
-
-<br><br><br><p4><b><font size="5">Latest Reviews</font></b></p4><br><br>
+<br><br><br><p3><b><font size="5">Latest Reviews</font></b></p3><br><br>
 <table align="center" width= 80%>
-
-{% for book in latest_review %}
-
-<td align=center>
-{% load static %}
-<div class="container-img">
-<a href="/bookstore/{{book.id}}">
-<img src="{{book.img}}" />
-<p id=text>{{book}}</a></p>
-<p id=text>Review date: {{book.update_review|date:"M d, Y"}}</p>
-</div>
+    {% for book in latest_review %}
+    <td align=center>
+        {% load static %}
+        <div class="container-img">
+            <a href="/{{book.id}}">
+            <img src="{{book.img}}" />
+            <p id=text>{{book}}</a></p>
+            <p id=text>Review date: {{book.update_review|date:"M d, Y"}}</p>
+        </div>
 
 
 
@@ -60,7 +46,7 @@
 
 
 
-<br><br><br><p7><b><font size="5">Top 5 Rating</font></b></p7><br><br>
+<br><br><br><p4><b><font size="5">Top 5 Rating</font></b></p4><br><br>
 <table align="center" width= 80%>
 {% if top_five_rating %}
 {% for t,s in top_five_rating %}
@@ -68,7 +54,7 @@
 <td align=center>
 
 <div class="container-img">
-<a href="/bookstore/{{t.id}}">
+<a href="/{{t.id}}">
 <img src="{{t.img}}" />
 <p id=text>{{t}}</a></p>
 <p id=text>Rating: {{t.avg_rating|floatformat:2 }}, {{s}}voters</p>

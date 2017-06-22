@@ -1,60 +1,49 @@
 {% extends 'bookstore/base.html' %}
 {% block a %}
-
 <br><br><br><br><br>
 <table width="100%">
-<tr align=left>
-
-<td  style=" width:33.33%; background-color:#fffdf7; vertical-align:middle">
-{% load static %}
-{% for i in image %}
-<img src="{{i.img}}" />
-{% endfor %}
-</td>
-<td width="33.33%" bgcolor="#fccd64">
-<p><font size="5"><b>Title : {{book_name}}</b></font size></p>
-
-<p><b>Author : {{book_name.author}}</b></p>
-
-
-{% if book_review %}
-
-<p><b>Average rating :</b> {{book_name.avg_rating|floatformat:2}}</p>
-<p>{{message}}<p>
-<p><b>Review :</b></p>
-{% for review in book_review %}
-        
-<p>- {{review.review_message}}</ p>
-
-{% endfor %}
-
-{% else %}
-    <p>review : ยังไม่มีรีวิวสำหรับหนังสือเล่มนี้</p>
-    
-{% endif %}
-</td>
-<td width="33.33%" bgcolor="#fccd64">
-<p><b>REVIEW THIS BOOK</b></p>
-<form action="{% url 'review' book_name.id %}" method="post">
-    {% csrf_token %}
-    <p>review box :</p>
-    <input type="text" name="review_message" /><br><br>
-    <p>rating :</p>
-    <input type="radio" name= "rating"  value="1" />
-         <label for="1">1</label>
-         <input type="radio" name= "rating"  value="2" />
-         <label for="2">2</label>
-         <input type="radio" name= "rating"  value="3" />
-         <label for="3">3</label>
-         <input type="radio" name= "rating"  value="4" />
-         <label for="4">4</label>
-         <input type="radio" name= "rating"  value="5" />
-         <label for="5">5</label>
-    <br><br> <input type="submit" name="review" value="review" /><br><br> 
-</form>
-</td>
+    <tr align=left>
+    <td  style=" width:33.33%; background-color:#fffdf7; vertical-align:middle">
+    {% load static %}
+    {% for i in image %}
+        <img src="{{i.img}}" />
+    {% endfor %}
+    </td>
+    <td width="33.33%" bgcolor="#fccd64">
+    <p name=title><font size="5"><b>Title : {{book_name}}</b></font size></p>
+    <p name=author><b>Author : {{book_name.author}}</b></p>
+    {% if book_review %}
+        <p><b>Average rating :</b> {{book_name.avg_rating|floatformat:2}}</p>
+        <p>{{message}}<p>
+        <p><b>Review :</b></p>
+        {% for review in book_review %}
+            <p>- {{review.review_message}}</ p>
+        {% endfor %}
+    {% else %}
+        <p>review : ยังไม่มีรีวิวสำหรับหนังสือเล่มนี้</p>
+    {% endif %}
+    </td>
+    <td width="33.33%" bgcolor="#fccd64">
+    <p name=review><b>REVIEW THIS BOOK</b></p>
+    <form action="/{{user_name}}/{{book_name.id}}/review/" method="post">
+        {% csrf_token %}
+        <p>review box :</p>
+        <input type="text" name="review_message" /><br><br>
+        <p>rating :</p>
+        <input type="radio" name= "rating"  value="1" />
+        <label for="1">1</label>
+        <input type="radio" name= "rating"  value="2" />
+        <label for="2">2</label>
+        <input type="radio" name= "rating"  value="3" />
+        <label for="3">3</label>
+        <input type="radio" name= "rating"  value="4" />
+        <label for="4">4</label>
+        <input type="radio" name= "rating"  value="5" />
+        <label for="5">5</label>
+        <br><br> <input type="submit" name="review" value="review" /><br><br> 
+    </form>
+    </td>
 </table>
-
 {% endblock %}
 
 

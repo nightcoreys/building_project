@@ -1,24 +1,24 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
-from django.http import HttpResponse
 from django.template import loader
 from .models import Book,Review,Category
 from django.db.models import Count,Max,Avg
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils.datastructures import MultiValueDictKeyError
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 import datetime
 
-
-def home(request):
-    num_books = Book.objects.all().count()
-    latest_book = Book.objects.all().order_by('-id')[:5]
-    latest_review =Book.objects.all().order_by('-update_review')[:5]
-    top5book = Book.objects.all().order_by('-avg_rating')[:5]
+def home(request,user_name):
+   
+    num_books = Book.objects.filter(owner=user_name).count()
+    latest_book = Book.objects.filter(owner=user_name).order_by('-id')[:5]
+    latest_review =Book.objects.filter(owner=user_name).order_by('-update_review')[:5]
+    top5book = Book.objects.filter(owner=user_name).order_by('-avg_rating')[:5]
     choice_cat = Category.objects.all()
     num_review=[]
 
@@ -34,18 +34,18 @@ def home(request):
         'latest_review' : latest_review,
         'top_five_rating' : top5rating,
         'choice_cat' : choice_cat,
-        
+        'user_name' : user_name,
         
     }
     return HttpResponse(template.render(context, request))
     
-def category(request,cat):
+def category(request,cat,user_name):
     choice_cat = Category.objects.all()
     if cat == 'Allbooks':
-        book = Book.objects.all().order_by('title')
+        book = Book.objects.filter(owner=user_name).order_by('title')
         
     else:
-        book = Book.objects.filter(category__name=cat).order_by('title')
+        book = Book.objects.filter(owner=user_name, category__name=cat).order_by('title')
 
         
     template = loader.get_template('bookstore/category.html')
@@ -53,10 +53,11 @@ def category(request,cat):
        'book' : book,
        'cat' : cat,
        'choice_cat' : choice_cat,
+       'user_name' : user_name,
     }
     return HttpResponse(template.render(context, request))
 
-def display_title(request,book_id):
+def display_title(request,book_id,user_name):
     book_name = get_object_or_404(Book, pk=book_id)
     book_review = Review.objects.filter(book=book_name).order_by('-timestamp')[:5]
     image = Book.objects.filter(pk=book_id)
@@ -69,11 +70,12 @@ def display_title(request,book_id):
         'book_review' : book_review,
         'image' : image,
         'choice_cat' : choice_cat,
+        'user_name' : user_name,
     }
     return HttpResponse(template.render(context, request))
 
 
-def review(request,book_id):
+def review(request,book_id,user_name):
     book_name = Book.objects.filter(id=book_id)
     new_review_message = request.POST.get('review_message')
     new_rating = request.POST.get('rating')
@@ -90,7 +92,7 @@ def review(request,book_id):
             avg = Book.objects.filter(id=book_id).update(avg_rating = Review.objects.filter(book=book_name).aggregate(Avg('rating')).get('rating__avg', 0.00))
             update = Book.objects.filter(id=book_id).update(update_review = timezone.now())
         
-        return HttpResponseRedirect('/bookstore/%s/' %book_id)
+        return HttpResponseRedirect('/%s/%s/' %(user_name,book_id))
     else:
         
         book_name = get_object_or_404(Book, pk=book_id)
@@ -104,21 +106,23 @@ def review(request,book_id):
             'book_review' : book_review,
             'image' : image,
             'message' : "your review unsuccessful.",
+            'user_name' : user_name,
         }
         return HttpResponse(template.render(context, request))
         
     
  
 
-def display_allreviews(request):
+def display_allreviews(request,user_name):
     allreviews = latest_review = Review.objects.all().order_by('-id')
     template = loader.get_template('bookstore/allreviews.html')
     context = {
         'allreviews' : allreviews,
+        'user_name' : user_name,
     }
     return HttpResponse(template.render(context, request))
 
-def search(request):
+def search(request,user_name):
     choice_cat = Category.objects.all()
     if 'tora' in request.GET:
         tora = request.GET['tora']
@@ -136,20 +140,21 @@ def search(request):
         'book' : book,
         'choice_cat':choice_cat,
         'search_query' : search_query,
+        'user_name' : user_name,
     }
     return HttpResponse(template.render(context, request))
 
-def about(request):
+def about(request,user_name):
     choice_cat = Category.objects.all()
     template = loader.get_template('bookstore/about.html')
-    return HttpResponse(template.render({'choice_cat':choice_cat,}, request))
+    return HttpResponse(template.render({'choice_cat':choice_cat,'user_name':user_name}, request))
 
-def newbook(request):
+def newbook(request,user_name):
     choice_cat = Category.objects.all()
     template = loader.get_template('bookstore/newbook.html')
-    return HttpResponse(template.render({'choice_cat':choice_cat,}, request))
+    return HttpResponse(template.render({'choice_cat':choice_cat,'user_name' : user_name,}, request))
     
-def addnewbook(request):
+def addnewbook(request,user_name):
     choice_cat = Category.objects.all()
     messaage=""
     new_cate=""
@@ -176,11 +181,11 @@ def addnewbook(request):
                 filename = fs.save(myfile.name, myfile)
                 uploaded_file_url = fs.url(filename)
                 for a in new_cate:
-                    new_book = Book(title=new_title,author=new_author,category=a,avg_rating="0.0",img="/media/"+myfile.name)
+                    new_book = Book(title=new_title,author=new_author,category=a,avg_rating="0.0",img="/media/"+myfile.name,owner=user_name)
                     new_book.save()
         
           
-                return HttpResponseRedirect('/bookstore/home/')
+                return HttpResponseRedirect('/%s/' %(user_name))
         
             else:
                 message = "unsuccessful."
@@ -191,8 +196,49 @@ def addnewbook(request):
     context = {
         'message' : message,
         'choice_cat':choice_cat,
+        'user_name' : user_name,
     }
     template = loader.get_template('bookstore/addnewbook.html')
     return HttpResponse(template.render(context, request))
 
+def index(request):
     
+    return render(request,"bookstore/login.html",[])
+
+
+def checklogin(request):
+    uname = request.POST['uname']
+    upassword = request.POST['password']
+    user = authenticate(username=uname,password=upassword)
+    
+    if user is not None:
+        #login(request,user)
+        return HttpResponseRedirect('/%s/' %(uname) )
+    else:
+        return HttpResponse("Error invalid login.")  
+
+def register(request):
+
+    return render(request,"bookstore/register.html",[])
+
+def registeration(request):
+    uname = request.POST['uname']
+    upassword = request.POST['password']
+    umail = request.POST['umail']
+    message = ""
+    if uname != "" and upassword != "" and umail != "" and uname != "admin":
+        user = User.objects.create_user(username=uname,email=umail,password=upassword)
+        message = "successful"
+        
+    else:
+        message = "unsuccessful"
+    context = {
+        'message' : message,
+    }    
+    template = loader.get_template('bookstore/register.html')
+    return HttpResponse(template.render(context, request))
+
+def logout_view(request,user_name):
+    logout(request)
+
+    return HttpResponseRedirect('/')

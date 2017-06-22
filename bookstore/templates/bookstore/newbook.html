@@ -9,47 +9,36 @@ div.square {
   top:25%;
   left:25%;
   background-color:#fccd64;
-  
-  
 }
-
 </style>
-<form action="/bookstore/addnewbook/"" method="post" enctype="multipart/form-data">
+<form action="/{{user_name}}/addnewbook/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-<div style="text-align:center;">
-<h1>Add new book</h1><br><br>  <br>  <br>  <br>    
-<div class="square">
-    
-    
-    <p>Title :
-    <input type="text" name="title" /></p><br><br>
-    <p>Author :
-    <input type="text" name="author" /></p><br><br>
-    <p>Category :
-    <select name="cat" onchange='checkvalue(this.value)'/>
-       {% for cat in choice_cat %}
-      <option value="{{cat.name}}">{{cat.name}}</option>
-      {% endfor %}
-       <option value="others">others</option>
-    </select></p><br>
-
-
-    <input type="text" name="catt" id="catt" style='display:none'/><br><br><br> 
-    <input type="file" id="myfile" name="myfile" class="inputfile" />
-    <br><br> <input type="submit" name="ADD" value="ADD" /><br><br> 
-
-</div>
-
-  
-</div>
+    <div style="text-align:center;">
+        <h1>Add new book</h1><br><br>  <br>  <br>  <br>    
+        <div class="square">
+            <p>Title :
+            <input type="text" name="title" /></p><br><br>
+            <p>Author :
+            <input type="text" name="author" /></p><br><br>
+            <p>Category :
+            <select name="cat" onchange='checkvalue(this.value)'/>
+            {% for cat in choice_cat %}
+                <option value="{{cat.name}}">{{cat.name}}</option>
+            {% endfor %}
+            <option value="others">others</option>
+            </select></p><br>
+            <input type="text" name="catt" id="catt" style='display:none'/><br><br><br> 
+            <input type="file" id="myfile" name="myfile" class="inputfile" />
+            <br><br> <input type="submit" name="ADD" value="ADD" /><br><br> 
+        </div>
+    </div>
 </form>
 <script>
-function checkvalue(val)
-{
-    if(val==="others")
-       document.getElementById('catt').style.display='inline-block';
-    else
-       document.getElementById('catt').style.display='none'; 
-}
+    function checkvalue(val){
+        if(val==="others")
+           document.getElementById('catt').style.display='inline-block';
+        else
+           document.getElementById('catt').style.display='none'; 
+    }
 </script>
 {% endblock %}

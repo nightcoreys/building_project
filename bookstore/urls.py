@@ -3,15 +3,20 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^home/$', views.home, name='index'),
-    url(r'^cat/(?P<cat>[a-zA-Z]+)/$', views.category, name='category'),
-    url(r'^(?P<book_id>[0-9]+)/$', views.display_title, name='display_title'),
-    url(r'^review/(?P<book_id>[0-9]+)/$', views.review, name='review'),
-    url(r'^allreviews/$', views.display_allreviews, name='review'),
-    url(r'^search/$', views.search, name='search'),
-    url(r'^about/$', views.about, name='about'),
-    url(r'^addnewbook/$', views.addnewbook, name='addnewbook'),
-    url(r'^newbook/$', views.newbook, name='newbook'),
-
+    url(r'^checklogin/$', views.checklogin, name='checklogin'),
+    url(r'^$', views.index, name='index'),
+    url(r'^register/$', views.register, name='register'),
+    url(r'^(?P<user_name>\w+)/about/$', views.about, name='about'),
+    url(r'^registeration/$', views.registeration, name='registeration'),
+    url(r'^(?P<user_name>\w+)/logout/$', views.logout_view, name='logout'),
+    url(r'^(?P<user_name>\w+)/$', views.home, name='home'),
+    url(r'^(?P<user_name>\w+)/cat/(?P<cat>[a-zA-Z]+)/$', views.category, name='category'),
+    url(r'^(?P<user_name>\w+)/(?P<book_id>[0-9]+)/$', views.display_title, name='display_title'),
+    url(r'^(?P<user_name>\w+)/(?P<book_id>[0-9]+)/review/$', views.review, name='review'),
+    url(r'^(?P<user_name>\w+)/allreviews/$', views.display_allreviews, name='review'),
+    url(r'^(?P<user_name>\w+)/search/$', views.search, name='search'),
+    url(r'^(?P<user_name>\w+)/addnewbook/$', views.addnewbook, name='addnewbook'),
+    url(r'^(?P<user_name>\w+)/newbook/$', views.newbook, name='newbook'),
+    
 
 ]

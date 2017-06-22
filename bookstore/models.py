@@ -18,6 +18,7 @@ class Book(models.Model):
     img = models.CharField(max_length=100,null=False)
     update_review = models.DateTimeField(null=True)
     release_date = models.DateTimeField(default=timezone.now())
+    owner = models.TextField(null=False)
 
     def __str__(self):
         return self.title

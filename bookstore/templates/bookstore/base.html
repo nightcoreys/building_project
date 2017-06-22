@@ -153,16 +153,17 @@ body {
 
 
 <div class="container">
-  <a href="/bookstore/home">Home</a>
-  <ui style="float: right;"><a href="/bookstore/about">About</a></ui>
-  <a href="/bookstore/newbook">Add new</a>
-  <a href="/bookstore/cat/Allbooks">All books</a>
+  <a href="/{{user_name}}/">Home</a>
+  <ui style="float: right;"><a href="/{{user_name}}/logout">Logout</a></ui>
+  <ui style="float: right;"><a href="/{{user_name}}/about">About</a></ui>
+  <a href="/{{user_name}}/newbook">Add new</a>
+  <a href="/{{user_name}}/cat/Allbooks">All books</a>
 
    <div class="dropdown">
-    <button class="dropbtn" onclick="myFunction()">Category</button>
+    <button name=cat class="dropbtn" onclick="myFunction()">Category</button>
     <div class="dropdown-content" id="myDropdown">
       {% for cat in choice_cat %}
-      <a href="/bookstore/cat/{{cat.name}}">{{cat.name}}</a>
+      <a name={{cat.name}} href="/{{user_name}}/cat/{{cat.name}}">{{cat.name}}</a>
       {% endfor %}
     </div>
   </div> 
@@ -170,7 +171,7 @@ body {
 </div>
 
 
-<form action="/bookstore/search/" method="get">
+<form action="/{{user_name}}/search/" method="get">
     {% csrf_token %}
     <div style="white-space:nowrap; float: right;">         
     Search by: 
