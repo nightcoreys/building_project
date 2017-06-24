@@ -1,10 +1,13 @@
 from django.core.urlresolvers import resolve
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from bookstore.models import Book
-from bookstore.views import home, index
+from bookstore.models import Book, Category, Review
+from bookstore.views import home, index, newbook
 from django.contrib.auth.models import User 
+from django.contrib.auth import authenticate, login, logout
+from django.db.models import Count,Max,Avg
+from django.utils import timezone
 import re
 
 class LoginAndRegisterTest(TestCase):
@@ -21,7 +24,8 @@ class LoginAndRegisterTest(TestCase):
         request = HttpRequest()  
         response = index(request) 
         expected_html = render_to_string('bookstore/login.html')
-        self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)  
+        self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
+        #self.assertEqual(response.content.decode(), expected_html)  
 
     def test_register_has_to_work_properly(self):
         response = self.client.post('/register/')        
@@ -40,16 +44,91 @@ class LoginAndRegisterTest(TestCase):
         self.assertEqual(first_user.username, 'kati')
         self.assertEqual(second_user.username, 'plakat')
 
-    #def test_login_has_to_work_properly(self):
-    #    response = self.client.post('/') 
-   
-#class AddNewBookTest(TestCase):
-
-    #def test_change_to_add_page(self):
-        #book_ = Book.objects.create()
-        #response = self.client.get('/bookstore/newbook/')
-        #self.assertTemplateUsed(response,'/bookstore/newbook.html'+'/bookstore/base.html')
-
-    #def test_add_book(self):
-    #    response = self.client.post('/B1/bookstore/newbook/',data={'title': 'A new list item','author': 'A new list item','cat':'Novel'})
+    def test_login_has_to_work_properly(self):
         
+        self.client = Client()
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        #self.assertTrue('Log in' in response.content)
+        login = self.client.login(username='kati', password='kati123')
+        response = self.client.get('/kati/')
+        self.assertTrue(response.status_code, 200) 
+        #self.assertTrue(login)
+
+##### !! change class name !! #####
+class AddNewBookTest(TestCase):
+
+    def remove_csrf(self,html_code):
+        csrf_regex = r'&lt;input[^&gt;]+csrfmiddlewaretoken[^&gt;]+&gt;'
+
+        return re.sub(csrf_regex,'',html_code)
+
+#####  !! chang function name !! ##### >> def test_display_book_page_work_properly
+    def test_display_book_page_returns_correct_html(self):
+        response = self.client.post('/kati/newbook/')
+        request = HttpRequest()  
+        #response = newbook(request,'kati')
+        expected_html = render_to_string('bookstore/newbook.html')
+        #self.assertEqual(self.remove_csrf(response.content.decode()), expected_html) 
+        self.assertTrue(response.status_code, 200) 
+        num_books = Book.objects.filter(owner='kati').count()
+        self.assertEqual(num_books, 0)
+        
+    def test_add_book_and_review(self):
+        num_cat = Category.objects.filter(owner='kati')
+        self.assertEqual(num_cat.count(), 0)
+
+        first_cat = Category(name='Novel',owner='kati')
+        first_cat.save()
+
+        num_cat = Category.objects.filter(owner='kati')
+        self.assertEqual(num_cat.count(), 1)
+
+        first_book = Book(title='The Thief of Baramos', author='Rabbit', owner='kati', category=num_cat[0])
+        first_book.save()
+        book = Book.objects.filter(owner='kati')
+        self.assertEqual(book.count(), 1)
+
+        second_book = Book(title='The Thief of Baramos vol2', author='Rabbit', owner='kati', category=num_cat[0])
+        second_book.save()
+        book = Book.objects.filter(owner='kati')
+        #self.assertEqual(book.count(), 2)
+
+        
+        first_review = Review(book=book[0],timestamp=timezone.now(),review_message='สนุกมาก', rating=4)
+        first_review.save()
+              
+        avg = Book.objects.filter(id=book[0].id).update(avg_rating = Review.objects.filter(book=book[0]).aggregate(Avg('rating')).get('rating__avg', 0.00))
+        update = Book.objects.filter(id=book[0].id).update(update_review = timezone.now())
+
+        second_review = Review(book=book[1],timestamp=timezone.now(),review_message='สนุกมาก', rating=4)
+        second_review.save()
+
+        third_review = Review(book=book[1],timestamp=timezone.now(),review_message='สนุกมาก', rating=5)
+        third_review.save()
+
+        avg = Book.objects.filter(id=book[1].id).update(avg_rating = Review.objects.filter(book=book[1]).aggregate(Avg('rating')).get('rating__avg', 0.00))
+        update = Book.objects.filter(id=book[1].id).update(update_review = timezone.now())
+
+
+        num_review = Review.objects.all()
+        self.assertEqual(num_review.count(),3)
+        self.assertEqual(book[0].avg_rating,4)
+        self.assertEqual(book[1].avg_rating,4.5)
+
+#class HomePageTest(TestCase):
+
+#    def remove_csrf(self,html_code):
+#        csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
+#        return re.sub(csrf_regex,'',html_code)
+
+#    def test_home_page_returns_correct_html(self):
+        response = self.client.post('/kati/')
+        found = resolve('/kati/')  
+        request = HttpRequest()  
+        self.assertEqual(found.func, home)  
+        #response = newbook(request,'kati')
+        self.assertTrue(response.status_code, 200) 
+        book = Book.objects.filter(owner='kati')
+        
+        self.assertEqual(book.count(), 2)
