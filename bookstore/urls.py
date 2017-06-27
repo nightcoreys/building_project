@@ -3,7 +3,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^checklogin/$', views.checklogin, name='checklogin'),
+    url(r'^checkaccount/$', views.checkaccount, name='checkaccount'),
     url(r'^$', views.index, name='index'),
     url(r'^register/$', views.register, name='register'),
     url(r'^(?P<user_name>\w+)/about/$', views.about, name='about'),

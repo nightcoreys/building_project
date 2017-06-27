@@ -22,6 +22,7 @@ div.square {
             <input type="text" name="author" /></p><br><br>
             <p>Category :
             <select name="cat" onchange='checkvalue(this.value)'/>
+            <option value="null">please select type of book.</option>
             {% for cat in choice_cat %}
                 <option value="{{cat.name}}">{{cat.name}}</option>
             {% endfor %}

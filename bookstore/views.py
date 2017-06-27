@@ -40,7 +40,7 @@ def home(request,user_name):
     return HttpResponse(template.render(context, request))
     
 def category(request,cat,user_name):
-    choice_cat = Category.objects.all()
+    choice_cat = Category.objects.filter(owner=user_name)
     if cat == 'Allbooks':
         book = Book.objects.filter(owner=user_name).order_by('title')
         
@@ -124,6 +124,7 @@ def display_allreviews(request,user_name):
 
 def search(request,user_name):
     choice_cat = Category.objects.all()
+    search_query=""
     if 'tora' in request.GET:
         tora = request.GET['tora']
         search_query = request.GET['search']
@@ -150,12 +151,12 @@ def about(request,user_name):
     return HttpResponse(template.render({'choice_cat':choice_cat,'user_name':user_name}, request))
 
 def newbook(request,user_name):
-    choice_cat = Category.objects.all()
+    choice_cat = Category.objects.filter(owner=user_name)
     template = loader.get_template('bookstore/newbook.html')
     return HttpResponse(template.render({'choice_cat':choice_cat,'user_name' : user_name,}, request))
     
 def addnewbook(request,user_name):
-    choice_cat = Category.objects.all()
+    choice_cat = Category.objects.filter(owner=user_name)
     messaage=""
     new_cate=""
     try:
@@ -165,27 +166,27 @@ def addnewbook(request,user_name):
             new_cat = request.POST.get('cat')
             myfile = request.FILES['myfile']
             
-
-            if new_cat=="others":
-                new_cate = request.POST.get('catt')
-                new_category = Category(name=new_cate,owner=user_name)
-                new_category.save()
+            if new_cat!="null":
+                if new_cat=="others":
+                    new_cate = request.POST.get('catt')
+                    new_category = Category(name=new_cate,owner=user_name)
+                    new_category.save()
                 
-            else:
-                new_cate = request.POST.get('cat')
+                else:
+                    new_cate = request.POST.get('cat')
 
-            new_cate = Category.objects.filter(name=new_cate)
+                new_cate = Category.objects.filter(name=new_cate)
 
-            if (new_title != "") and (new_author != ""):
-                fs = FileSystemStorage()
-                filename = fs.save(myfile.name, myfile)
-                uploaded_file_url = fs.url(filename)
-                for a in new_cate:
-                    new_book = Book(title=new_title,author=new_author,category=a,avg_rating="0.0",img="/media/"+myfile.name,owner=user_name)
-                    new_book.save()
+                if (new_title != "") and (new_author != ""):
+                    fs = FileSystemStorage()
+                    filename = fs.save(myfile.name, myfile)
+                    uploaded_file_url = fs.url(filename)
+                    for a in new_cate:
+                        new_book = Book(title=new_title,author=new_author,category=a,avg_rating="0.0",img="/media/"+myfile.name,owner=user_name)
+                        new_book.save()
         
           
-                return HttpResponseRedirect('/%s/' %(user_name))
+                    return HttpResponseRedirect('/%s/' %(user_name))
         
             else:
                 message = "unsuccessful."
@@ -206,16 +207,20 @@ def index(request):
     return render(request,"bookstore/login.html",[])
 
 
-def checklogin(request):
+def checkaccount(request):
     uname = request.POST['uname']
     upassword = request.POST['password']
     user = authenticate(username=uname,password=upassword)
     
     if user is not None:
-        #login(request,user)
+        login(request,user)
         return HttpResponseRedirect('/%s/' %(uname) )
     else:
-        return HttpResponse("Error invalid login.")  
+        context = {
+        'message' : 'Invalid login. Please try again.',
+    }
+    template = loader.get_template('bookstore/login.html')
+    return HttpResponse(template.render(context, request))
 
 def register(request):
 
@@ -225,13 +230,18 @@ def registeration(request):
     uname = request.POST['uname']
     upassword = request.POST['password']
     umail = request.POST['umail']
-    message = ""
+
     if uname != "" and upassword != "" and umail != "" and uname != "admin":
-        user = User.objects.create_user(username=uname,email=umail,password=upassword)
-        message = "successful"
+        allusers = User.objects.filter(username=uname).count() 
+        if allusers ==1:
+            message = "This username is already registered, please choose another one."
+        else:
+            user = User.objects.create_user(username=uname,email=umail,password=upassword)
+            message = "You are alreary registered."
         
     else:
-        message = "unsuccessful"
+        
+         message = "You are not already registered, please fill the form below."
     context = {
         'message' : message,
     }    

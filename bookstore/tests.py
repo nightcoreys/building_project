@@ -25,10 +25,11 @@ class LoginAndRegisterTest(TestCase):
         response = index(request) 
         expected_html = render_to_string('bookstore/login.html')
         self.assertEqual(self.remove_csrf(response.content.decode()), expected_html)
-        #self.assertEqual(response.content.decode(), expected_html)  
+         
 
     def test_register_has_to_work_properly(self):
-        response = self.client.post('/register/')        
+        response = self.client.post('/register/') 
+        self.assertEqual(response.templates[0].name, 'bookstore/register.html')       
         first_user = User.objects.create_user(username='kati',email='kati@mail.com',password='kati123')
         first_user.save()
         allusers = User.objects.all()
@@ -48,31 +49,30 @@ class LoginAndRegisterTest(TestCase):
         
         self.client = Client()
         response = self.client.get('/')
+        self.assertEqual(response.templates[0].name, 'bookstore/login.html') 
         self.assertEqual(response.status_code, 200)
         #self.assertTrue('Log in' in response.content)
         login = self.client.login(username='kati', password='kati123')
         response = self.client.get('/kati/')
         self.assertTrue(response.status_code, 200) 
         #self.assertTrue(login)
+        self.assertEqual(response.templates[0].name, 'bookstore/home.html') 
 
 ##### !! change class name !! #####
 class AddNewBookTest(TestCase):
 
     def remove_csrf(self,html_code):
         csrf_regex = r'&lt;input[^&gt;]+csrfmiddlewaretoken[^&gt;]+&gt;'
-
         return re.sub(csrf_regex,'',html_code)
 
-#####  !! chang function name !! ##### >> def test_display_book_page_work_properly
-    def test_display_book_page_returns_correct_html(self):
+    def test_add_new_book_page_returns_correct_html(self):
         response = self.client.post('/kati/newbook/')
         request = HttpRequest()  
-        #response = newbook(request,'kati')
-        expected_html = render_to_string('bookstore/newbook.html')
-        #self.assertEqual(self.remove_csrf(response.content.decode()), expected_html) 
+        found = resolve('/kati/newbook/')  
+        self.assertEqual(found.func, newbook)
+        self.assertEqual(response.templates[0].name, 'bookstore/newbook.html')  
         self.assertTrue(response.status_code, 200) 
-        num_books = Book.objects.filter(owner='kati').count()
-        self.assertEqual(num_books, 0)
+        
         
     def test_add_book_and_review(self):
         num_cat = Category.objects.filter(owner='kati')
@@ -92,7 +92,7 @@ class AddNewBookTest(TestCase):
         second_book = Book(title='The Thief of Baramos vol2', author='Rabbit', owner='kati', category=num_cat[0])
         second_book.save()
         book = Book.objects.filter(owner='kati')
-        #self.assertEqual(book.count(), 2)
+        self.assertEqual(book.count(), 2)
 
         
         first_review = Review(book=book[0],timestamp=timezone.now(),review_message='สนุกมาก', rating=4)
@@ -116,19 +116,22 @@ class AddNewBookTest(TestCase):
         self.assertEqual(book[0].avg_rating,4)
         self.assertEqual(book[1].avg_rating,4.5)
 
-#class HomePageTest(TestCase):
 
-#    def remove_csrf(self,html_code):
-#        csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
-#        return re.sub(csrf_regex,'',html_code)
+        response = self.client.post('/kati/2/')
+        self.assertEqual(response.templates[0].name, 'bookstore/display_title.html') 
 
-#    def test_home_page_returns_correct_html(self):
-        response = self.client.post('/kati/')
-        found = resolve('/kati/')  
-        request = HttpRequest()  
-        self.assertEqual(found.func, home)  
-        #response = newbook(request,'kati')
-        self.assertTrue(response.status_code, 200) 
-        book = Book.objects.filter(owner='kati')
+class TemplatesAndRedirectsTest(TestCase):      
+        def search_template_test(self):
+            response = self.client.post('/kati/search/')
+            self.assertEqual(response.templates[0].name, 'bookstore/category.html')
+        def category_template_test(self):
+            response = self.client.post('/kati/cat/Allbooks/')
+            self.assertEqual(response.templates[0].name, 'bookstore/category.html')
+        def about_template_test(self):
+            response = self.client.post('/kati/about/')
+            self.assertEqual(response.templates[0].name, 'bookstore/about.html')
+        def logout_redirect_and_template_test(self):
+            response = self.client.get('/kati/logout/') 
+            self.assertRedirects(response, '/')
+            self.assertEqual(response.templates[0].name, 'bookstore/login.html')
         
-        self.assertEqual(book.count(), 2)

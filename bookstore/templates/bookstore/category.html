@@ -172,8 +172,8 @@ vertical-align:top;
         <th width=30%>Author</th></tr></thead>
         <tbody>
         {% for book in book %}
-            <tr ><th width=30%><a href="/{{user_name}}/{{book.id}}">{{book.title}}</a> </th>
-            <th width=30%>{{book.author}}</th></tr> 
+            <tr ><th width=30%><a name={{book.title}} href="/{{user_name}}/{{book.id}}">{{book.title}}</a> </th>
+            <th width=30% name={{book.title}}>{{book.author}}</th></tr> 
         {% endfor %}
         </tbody> 
     </table> 

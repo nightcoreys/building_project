@@ -11,22 +11,51 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.quit()
 
     def test_can_start_a_list_and_retrieve_it_later(self):  
-        #ปิดเทอมแล้ว กะทิต้องการหาหนังสืออ่านเล่นในช่วงปิดเทอมจึงเข้าไปที่เว็บร้านหนังสือร้านหนึ่ง
-        self.browser.get('http://localhost:8000/bookstore/home/')
+        #กะทิได้ยินเกี่ยวกับ web application ที่สามารถจัดเก็บรายชื่อได้ จึงลองเข้าไปที่หน้าเว็บดังกล่าว
+        self.browser.get('http://localhost:8000/')
         
-        #ในหน้าโฮมจะพบข้อความ 'My Bookshelf' 
+        #หน้าแรกของเว็บไซต์ปรากฏแบบฟอร์มให้เข้าใช้งานและมี link สำหรับลงทะเบียน  กะทิจึงกดเข้าไปที่ link ดังกล่าว
+        register = self.browser.find_element_by_name('register').click()
+        time.sleep(2)
+
+        #เมื่อเข้ามาแล้วกะทิพบกับแบบฟอร์มให้กรอกชื่อผู้ใช้งาน รหัสผ่าน และ email กะทิทำการกรอกข้อมูลทั้งหมดแล้วกดปุ่มcreate
+        uname = self.browser.find_element_by_name('uname')
+        uname.send_keys('kati')
+        password = self.browser.find_element_by_name('password')
+        password.send_keys('kati123')
+        email = self.browser.find_element_by_name('umail')
+        email.send_keys('kati@mail.com')
+        register = self.browser.find_element_by_name('submit').click()
+        time.sleep(2)
+
+        #มีข้อความปรากฏในหน้าเดิมนั้นว่า บัญชีถูกสร้างเรียบร้อยแล้ว กะทิจึงกลับไปที่หน้าลงชื่อเข้าใช้งานแล้วทำการ log in
+        back_to_home = self.browser.find_element_by_name('back_to_home').click()
+        time.sleep(2)
+
+        uname = self.browser.find_element_by_name('uname')
+        uname.send_keys('kati')
+        password = self.browser.find_element_by_name('password')
+        password.send_keys('kati123')
+        login = self.browser.find_element_by_name('submit').click()
+        time.sleep(2)
+
+        #เมื่อเข้าสู่ระบบกะทิพบกับเมนูต่างๆ และข้อความ 'My Bookshelf' รวมทั้งกล่องค้นหา 
+
+        home = self.browser.find_element_by_link_text("Home").text
+        self.assertIn('Home', home)
+        
 
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('My Bookshelf', header_text)
 
-        #กล่องค้นหา
+       
         searchbox = self.browser.find_element_by_id('search')
         self.assertEqual(
                 searchbox.get_attribute('placeholder'),
                 'Search'
         )
 
-        #และปรากฏจำนวนหนังสือทั้งหมด รายชื่อหนังสือล่าสุด 5 ลำดับ และรายชื่อหนังสือที่ถูกรีวิวล่าสุด 5 ลำดับ
+        #เมื่อกวาดสายตามองดีๆกะทิพบจำนวนหนังสือทั้งหมด หัวข้อหนังสือล่าสุด  หัวข้อหนังสือที่ถูกรีวิวล่าสุด และหัวข้อหนังสือที่มีเรทคะแนนสูงสุด 
         text1 = self.browser.find_element_by_tag_name('p').text
         self.assertIn('total book', text1)
         text2 = self.browser.find_element_by_tag_name('p2').text
@@ -36,28 +65,36 @@ class NewVisitorTest(unittest.TestCase):
         text4 = self.browser.find_element_by_tag_name('p4').text
         self.assertIn('Top 5 Rating', text4)
         
+        #เพราะเป็นครั้งแรกในการใช้งาน กะทิจึงอยากรู้ว่า web application นี้สามารถทำอะไรได้บ้างจึงเข้าไปที่เมนู about
+        about = self.browser.find_element_by_link_text('About')
+        self.assertIn('About', about.text)
+        
+        about.click()
+        time.sleep(2)
 
         #กะทิต้องการเพิ่มหนังสือเล่มใหม่ลงใน web application จึงกดที่ Add new 
-        #link1 = self.browser.find_element_by_link_text("Add new").click()
-        #time.sleep(5)
+        addnew = self.browser.find_element_by_link_text('Add new')
+        self.assertIn('Add new', addnew.text)
+        addnew.click()
+        time.sleep(5)
 
-        #reviewbox = self.browser.find_element_by_name('title')
-        #reviewbox.send_keys('aaa')
-        #reviewbox = self.browser.find_element_by_name('author')
-        #reviewbox.send_keys('bbb')
-        #time.sleep(5)
-        #link11 = self.browser.find_element_by_name("myfile").click()
-        #time.sleep(15)
-        #link12 = self.browser.find_element_by_name("ADD").click()
-        #time.sleep(5)
+        title = self.browser.find_element_by_name('title')
+        title.send_keys('aaa')
+        author = self.browser.find_element_by_name('author')
+        author.send_keys('bbb')
+        time.sleep(2)
+        myfile = self.browser.find_element_by_name("myfile").click()
+        time.sleep(10)
+        add = self.browser.find_element_by_name("ADD").click()
+        time.sleep(5)
         
 
         #หน้าเว็บเพจเปลี่ยนกลับไปเป็นหน้าโฮม กะทิพบว่าหนังสือที่เธอเพิ่มไปนั้นปรากฏอยู่ที่ New Release เธอจึงกดเข้าไปที่หนังสือเล่มนั้น
-        link1 = self.browser.find_element_by_link_text("Home").click()
-        time.sleep(2)
+        #กะทิพบว่าหน้าเว็บเปลี่ยนไปแสดงรายละเอียดต่างๆของหนังสือ
         
-        link12 = self.browser.find_element_by_name("aaa").click()
-        time.sleep(5)
+        
+        book = self.browser.find_element_by_name("aaa").click()
+        time.sleep(2)
         
         title = self.browser.find_element_by_name('title').text
         self.assertIn('aaa', title)
@@ -65,98 +102,72 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn('bbb', author)
 
 
-        #ช่วงกะทิรีวิว!!
+        #และยังมีส่วนสำหรับการรีวิวหนังสืออีกด้วย กะทิจึงลองเขียนรีวิวให้หนังสือเล่มที่กำลังแสดงบนหน้าเว็บ  
+
         review = self.browser.find_element_by_name('review').text
         self.assertIn('REVIEW THIS BOOK', review)
         review_message = self.browser.find_element_by_name('review_message')
-        #review_message.send_keys('สนุก')
-        #time.sleep(5)
+        review_message.send_keys('สนุก')
+        time.sleep(2)
 
-        
-        
-        #radio_rating_n = self.browser.find_element_by_xpath(".//input[@type='radio' and @value='2']")
-        #radio_rating_n.click()
+        radio_rating_n = self.browser.find_element_by_xpath(".//input[@type='radio' and @value='2']")
+        radio_rating_n.click()
 
-        #radio_rating = self.browser.find_element_by_xpath(".//input[@type='radio' and @value='4']")
-        #radio_rating.click()
+        radio_rating = self.browser.find_element_by_xpath(".//input[@type='radio' and @value='4']")
+        radio_rating.click()
 
-        #self.assertEqual(
-        #        radio_rating.is_selected(),
-        #        True
-        #)
-        #self.assertEqual(
-        #        radio_rating_n.is_selected(),
-        #        False
-        #) 
+        self.assertEqual(
+                radio_rating.is_selected(),
+                True
+        )
+        self.assertEqual(
+                radio_rating_n.is_selected(),
+                False
+        ) 
         
 
-        #review_button = self.browser.find_element_by_name('review')
-        #review_button.send_keys(Keys.ENTER)       
+        review_button = self.browser.find_element_by_name('review')
+        review_button.send_keys(Keys.ENTER)       
 
-        #time.sleep(3)
+        time.sleep(3)
         
-        link1 = self.browser.find_element_by_link_text("All books").click()
+
+#--------------------------------------------------------------
+        #เมื่อรีวิวเสร็จ กะทิพบว่าข้อความที่เธอรีวิว ไปปรากฏอยู่ตรง column ตรงกลาง... avg เปลี่ยน
+#--------------------------------------------------------------   
+
+
+        #กะทิลองกดไปที่เมนูที่ชื่อว่า All books ซึ่งทำให้พบกับรายชื่อหนังสือทุกเล่มที่เธอมี
+        allbooks = self.browser.find_element_by_link_text("All books").click()
         time.sleep(3)
         pcat = self.browser.find_element_by_name('pcat').text
         self.assertIn('My Bookshelf : Allbooks', pcat)
 
-        
-        link1 = self.browser.find_element_by_name("cat").click()
+        #เมื่อลองกดที่ category ก็พบ droped down menu เธอจึงกดที่ Novel ทำให้พบกับรายชื่อหนังสือทุกเล่มที่เป็นประเภท Novel ที่เธอมี
+        cat = self.browser.find_element_by_name("cat").click()
         time.sleep(3)
-        link1 = self.browser.find_element_by_name("Novel").click()
+        novel = self.browser.find_element_by_name("Novel").click()
         time.sleep(3)
         pcat = self.browser.find_element_by_name('pcat').text
         self.assertIn('My Bookshelf : Novel', pcat)
 
 
-        #
-        link1 = self.browser.find_element_by_link_text("Home").click()
+        #กะทิลองค้นหาชื่อหนังสือโดยใช้ช่องค้นหา
+        home = self.browser.find_element_by_link_text("Home").click()
         time.sleep(2)
-        reviewbox = self.browser.find_element_by_name('search')
-        reviewbox.send_keys('aaa')
-        reviewbox.send_keys(Keys.ENTER)
-        time.sleep(5)
+        search = self.browser.find_element_by_name('search')
+        search.send_keys('aaa')
+        search.send_keys(Keys.ENTER)
+        time.sleep(2)
 
-#        #กะทิพบหนังสือที่ชื่อว่า Ice Cold เธอสนใจจึงกดที่ชื่อหนังสือเล่มนั้นซึ่งปรากฏอยู่ในรายชื่อหนังสือล่าสุด
-#        link1 = self.browser.find_element_by_link_text("Ice Cold").click()
-#        time.sleep(5)
+        #เมื่อเธอลองใช้งานจนพอใจแล้วจึงลงชื่อออกจากระบบ
+        logout = self.browser.find_element_by_link_text('Logout').click()
+        time.sleep(2)
 
-#        #หน้าเว็บเปลี่ยนไปแสดงรายละเอียดของหนังสือ ในหน้านั้นมีส่วนสำหรับรีวิว
 
-#        #เมื่อพบว่าผู้แต่งคือ Tess Gerritsen กะทิจึงนึกได้ว่าเคยอ่านไปแล้ว เธออยากให้คนอื่นได้รู้ว่ามันสนุก จึงเขียนรีวิว 
-#        reviewbox = self.browser.find_element_by_name('review_message')
-#        reviewbox.send_keys('เยี่ยม')
 
-#        radio_rating = self.browser.find_element_by_xpath(".//input[@type='radio' and @value='4']")
-#        radio_rating.click()
-        
-#        radio_rating_n = self.browser.find_element_by_xpath(".//input[@type='radio' and @value='2']")
 
-#        self.assertEqual(
-#                radio_rating.is_selected(),
-#                True
-#        )
-#        self.assertEqual(
-#                radio_rating_n.is_selected(),
-#                False
-#        ) 
-        
-
-#        review_button = self.browser.find_element_by_name('review')
-#        review_button.send_keys(Keys.ENTER)       
-
-#        time.sleep(3)
-#----------------------------------------------------------------------------------
-        #self.browser.get('http://localhost:8000')
-
-        #searchbox.send_keys('detective conan volume 40')
-        #searchbox.send_keys(Keys.ENTER)
-        #time.sleep(5)
-#-----------------------------------------------------------------------
-    #กะทิไม่รู้จะอ่านหนังสืออะไรจึงเข้าไปดูรีวิวทั้งหมดเพื่อช่วยในการตัดสินใจ หน้าเว็บปรากฏรายชื่อหนังสือที่ถูกรีวิวทั้งหมด กะทิพบว่า ----- เป็นหนังสือที่ถูกรีวิวเยอะ จึงกดที่ชื่อหนังสือเล่มนั้นแล้วทำการจอง
-#-----------------------------------------------------------------------
-    #กะทิอยากรู้ว่าหนังสือที่จองไปมีเล่มต่อทั้งหมดกี่เล่มจึงกลับไปที่หน้าโฮม แล้วทำการ search ชื่อหนังสือลงไป หน้าเว็บแสดงรายชื่อหนังสือที่มีชื่อดังกล่าว จำนวน---เล่ม เธอจึงตัดสินใจว่าถ้าอ่านเล่มนี้จบแล้วสนุก เธอจะยืมมันมาอ่านให้หมด!
-#-----------------------------------------------------------------------        
+     
 
         self.fail('Finish the test!') 
         self.browser.quit()
