@@ -15,10 +15,14 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:8000/')
         
         #หน้าแรกของเว็บไซต์ปรากฏแบบฟอร์มให้เข้าใช้งานและมี link สำหรับลงทะเบียน  กะทิจึงกดเข้าไปที่ link ดังกล่าว
+        webapp = self.browser.find_element_by_name('webappname')
+        self.assertIn('My Bookshelf', webapp.text)
         register = self.browser.find_element_by_name('register').click()
         time.sleep(2)
-
+        
         #เมื่อเข้ามาแล้วกะทิพบกับแบบฟอร์มให้กรอกชื่อผู้ใช้งาน รหัสผ่าน และ email กะทิทำการกรอกข้อมูลทั้งหมดแล้วกดปุ่มcreate
+        register = self.browser.find_element_by_name('register')
+        self.assertIn('Register', register.text)
         uname = self.browser.find_element_by_name('uname')
         uname.send_keys('kati')
         password = self.browser.find_element_by_name('password')
@@ -31,24 +35,33 @@ class NewVisitorTest(unittest.TestCase):
         #มีข้อความปรากฏในหน้าเดิมนั้นว่า บัญชีถูกสร้างเรียบร้อยแล้ว กะทิจึงกลับไปที่หน้าลงชื่อเข้าใช้งานแล้วทำการ log in
         back_to_home = self.browser.find_element_by_name('back_to_home').click()
         time.sleep(2)
+     
+        webapp = self.browser.find_element_by_name('webappname')
+        self.assertIn('My Bookshelf', webapp.text)
 
         uname = self.browser.find_element_by_name('uname')
+        self.assertEqual(
+                uname.get_attribute('placeholder'),
+                'username'
+        )
         uname.send_keys('kati')
         password = self.browser.find_element_by_name('password')
+        self.assertEqual(
+                password.get_attribute('placeholder'),
+                'password'
+        )
         password.send_keys('kati123')
-        login = self.browser.find_element_by_name('submit').click()
+        login = self.browser.find_element_by_name('submit')
+        self.assertIn('LOGIN', login.text)
+        login.click()
         time.sleep(2)
 
         #เมื่อเข้าสู่ระบบกะทิพบกับเมนูต่างๆ และข้อความ 'My Bookshelf' รวมทั้งกล่องค้นหา 
 
         home = self.browser.find_element_by_link_text("Home").text
         self.assertIn('Home', home)
-        
-
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('My Bookshelf', header_text)
-
-       
         searchbox = self.browser.find_element_by_id('search')
         self.assertEqual(
                 searchbox.get_attribute('placeholder'),
@@ -95,7 +108,6 @@ class NewVisitorTest(unittest.TestCase):
         
         book = self.browser.find_element_by_name("aaa").click()
         time.sleep(2)
-        
         title = self.browser.find_element_by_name('title').text
         self.assertIn('aaa', title)
         author = self.browser.find_element_by_name('author').text
@@ -131,12 +143,6 @@ class NewVisitorTest(unittest.TestCase):
 
         time.sleep(3)
         
-
-#--------------------------------------------------------------
-        #เมื่อรีวิวเสร็จ กะทิพบว่าข้อความที่เธอรีวิว ไปปรากฏอยู่ตรง column ตรงกลาง... avg เปลี่ยน
-#--------------------------------------------------------------   
-
-
         #กะทิลองกดไปที่เมนูที่ชื่อว่า All books ซึ่งทำให้พบกับรายชื่อหนังสือทุกเล่มที่เธอมี
         allbooks = self.browser.find_element_by_link_text("All books").click()
         time.sleep(3)
@@ -151,7 +157,6 @@ class NewVisitorTest(unittest.TestCase):
         pcat = self.browser.find_element_by_name('pcat').text
         self.assertIn('My Bookshelf : Novel', pcat)
 
-
         #กะทิลองค้นหาชื่อหนังสือโดยใช้ช่องค้นหา
         home = self.browser.find_element_by_link_text("Home").click()
         time.sleep(2)
@@ -163,11 +168,6 @@ class NewVisitorTest(unittest.TestCase):
         #เมื่อเธอลองใช้งานจนพอใจแล้วจึงลงชื่อออกจากระบบ
         logout = self.browser.find_element_by_link_text('Logout').click()
         time.sleep(2)
-
-
-
-
-     
 
         self.fail('Finish the test!') 
         self.browser.quit()

@@ -104,7 +104,7 @@ body {
   <div class="form">
     <form method="POST" action="/checkaccount/">
       {% csrf_token %}
-      <p>My Bookshelf</p>
+      <p name="webappname">My Bookshelf</p>
       <p class="message">{{message}}</p><br>
       <input type="text" placeholder="username" name="uname"/>
       <input type="password" placeholder="password" name="password"/>
