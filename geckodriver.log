@@ -1853,3 +1853,11 @@ MarionetteComponent.prototype.observe@resource://gre/components/marionettecompon
 1498663769549	Marionette	INFO	Listening on port 45596
 1498663769593	Marionette	WARN	TLS certificate errors will be ignored for this session
 1498663770448	Marionette	INFO	New connections will no longer be accepted
+1498751258514	geckodriver	INFO	Listening on 127.0.0.1:35820
+1498751259642	mozprofile::profile	INFO	Using profile path /tmp/rust_mozprofile.2H7Uh5KOtXku
+1498751259642	geckodriver::marionette	INFO	Starting browser /usr/bin/firefox with args []
+1498751259651	geckodriver::marionette	INFO	Connecting to Marionette on localhost:36898
+1498751263474	Marionette	WARN	Deprecated preference marionette.defaultPrefs.enabled detected, please use marionette.enabled
+1498751267392	Marionette	INFO	Listening on port 36898
+1498751267663	Marionette	WARN	TLS certificate errors will be ignored for this session
+1498751271251	Marionette	INFO	New connections will no longer be accepted

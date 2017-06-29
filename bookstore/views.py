@@ -169,13 +169,15 @@ def addnewbook(request,user_name):
             if new_cat!="null":
                 if new_cat=="others":
                     new_cate = request.POST.get('catt')
-                    new_category = Category(name=new_cate,owner=user_name)
-                    new_category.save()
+                    check_cate = Category.objects.filter(name=new_cate,owner=user_name).count()
+                    if check_cate ==  0:
+                        new_category = Category(name=new_cate,owner=user_name)
+                        new_category.save()
                 
                 else:
                     new_cate = request.POST.get('cat')
 
-                new_cate = Category.objects.filter(name=new_cate)
+                new_cate = Category.objects.filter(name=new_cate,owner=user_name)
 
                 if (new_title != "") and (new_author != ""):
                     fs = FileSystemStorage()

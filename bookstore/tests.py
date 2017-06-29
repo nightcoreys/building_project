@@ -58,8 +58,8 @@ class LoginAndRegisterTest(TestCase):
         #self.assertTrue(login)
         self.assertEqual(response.templates[0].name, 'bookstore/home.html') 
 
-##### !! change class name !! #####
-class AddNewBookTest(TestCase):
+
+class BookAndReviewTest(TestCase):
 
     def remove_csrf(self,html_code):
         csrf_regex = r'&lt;input[^&gt;]+csrfmiddlewaretoken[^&gt;]+&gt;'

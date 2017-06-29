@@ -10,6 +10,37 @@ div.square {
   left:25%;
   background-color:#fccd64;
 }
+button[name="ADD"] {
+  background: #43A047;
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 30%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+input[name=title],input[name=author],input[name=catt] {
+    margin: 0 0;
+    width: 300px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
 </style>
 <form action="/{{user_name}}/addnewbook/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -30,7 +61,7 @@ div.square {
             </select></p><br>
             <input type="text" name="catt" id="catt" style='display:none'/><br><br><br> 
             <input type="file" id="myfile" name="myfile" class="inputfile" />
-            <br><br> <input type="submit" name="ADD" value="ADD" /><br><br> 
+            <br><br> <button name="ADD" >ADD</button ><br><br> 
         </div>
     </div>
 </form>
