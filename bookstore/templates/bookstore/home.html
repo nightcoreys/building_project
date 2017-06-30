@@ -1,6 +1,6 @@
 {% extends 'bookstore/base.html' %}
 {% block a %}
-
+<title>Home</title>
 <br><br>
 <h1 align=center>My Bookshelf</h1>
 <p align=center>total book : {{num_books}}</p>
@@ -33,9 +33,6 @@
             <p id=text>{{book}}</a></p>
             <p id=text>Review date: {{book.update_review|date:"M d, Y"}}</p>
         </div>
-
-
-
 </td>
 
 {% endfor %}

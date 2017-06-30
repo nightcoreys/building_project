@@ -6,7 +6,7 @@ div.square {
   width: 50%;
   height: auto;
   position:absolute;
-  top:25%;
+  top:23%;
   left:25%;
   background-color:#fccd64;
 }
@@ -42,22 +42,31 @@ input[name=title],input[name=author],input[name=catt] {
 }
 
 </style>
+<title>Add Book</title>
+
+
+
 <form action="/{{user_name}}/addnewbook/" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div style="text-align:center;">
-        <h1>Add new book</h1><br><br>  <br>  <br>  <br>    
+          
+{% if message %}
+<p align=center name=pcat><font size="5">ADD NEW BOOK : {{message}}</p>
+{% else %}
+<p align=center name=pcat><font size="5">ADD NEW BOOK </p>
+{% endif %}  
         <div class="square">
-            <p>Title :
+            <p><font size="4">Title :
             <input type="text" name="title" /></p><br><br>
-            <p>Author :
+            <p><font size="4">Author :
             <input type="text" name="author" /></p><br><br>
-            <p>Category :
-            <select name="cat" onchange='checkvalue(this.value)'/>
-            <option value="null">please select type of book.</option>
+            <p><font size="4">Category :
+            <select id='cat' name="cat" onchange='checkvalue(this.value)'/>
+            <option selected disabled hidden>please select type of book.</option>
             {% for cat in choice_cat %}
-                <option value="{{cat.name}}">{{cat.name}}</option>
+                <option  value="{{cat.name}}">{{cat.name}}</option>
             {% endfor %}
-            <option value="others">others</option>
+            <option value="others"name="others" >others</option>
             </select></p><br>
             <input type="text" name="catt" id="catt" style='display:none'/><br><br><br> 
             <input type="file" id="myfile" name="myfile" class="inputfile" />

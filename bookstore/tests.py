@@ -51,11 +51,9 @@ class LoginAndRegisterTest(TestCase):
         response = self.client.get('/')
         self.assertEqual(response.templates[0].name, 'bookstore/login.html') 
         self.assertEqual(response.status_code, 200)
-        #self.assertTrue('Log in' in response.content)
         login = self.client.login(username='kati', password='kati123')
         response = self.client.get('/kati/')
         self.assertTrue(response.status_code, 200) 
-        #self.assertTrue(login)
         self.assertEqual(response.templates[0].name, 'bookstore/home.html') 
 
 

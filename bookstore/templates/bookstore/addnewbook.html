@@ -1,4 +1,10 @@
 {% extends 'bookstore/base.html' %}
 {% block a %}
-{{message}}
+<div id="pageNavPosition" style="padding-top: 20px" align="center"></div>
+
+    <p align=center><font size="5">My Bookshelf : {{cat}} {{search_query}} Not found</font></p>
+    <div style="text-align:center;">
+        <div class="square">
+            <p>Not found a book. Please check title or author that you search and confirm to select title or author at search by or sure that you has a book in this category.
+        </div></p></div>
 {% endblock %}

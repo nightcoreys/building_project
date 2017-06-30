@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 import unittest
 import time
 class NewVisitorTest(unittest.TestCase):
@@ -21,6 +22,10 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(2)
         
         #เมื่อเข้ามาแล้วกะทิพบกับแบบฟอร์มให้กรอกชื่อผู้ใช้งาน รหัสผ่าน และ email กะทิทำการกรอกข้อมูลทั้งหมดแล้วกดปุ่มcreate
+
+        current_url = self.browser.current_url
+        self.assertRegex(current_url, '/register/')
+
         register = self.browser.find_element_by_name('register')
         self.assertIn('Register', register.text)
         uname = self.browser.find_element_by_name('uname')
@@ -36,6 +41,9 @@ class NewVisitorTest(unittest.TestCase):
         back_to_home = self.browser.find_element_by_name('back_to_home').click()
         time.sleep(2)
      
+        current_url = self.browser.current_url
+        self.assertRegex(current_url, '/')
+
         webapp = self.browser.find_element_by_name('webappname')
         self.assertIn('My Bookshelf', webapp.text)
 
@@ -57,6 +65,9 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(2)
 
         #เมื่อเข้าสู่ระบบกะทิพบกับเมนูต่างๆ และข้อความ 'My Bookshelf' รวมทั้งกล่องค้นหา 
+
+        current_url = self.browser.current_url
+        self.assertRegex(current_url, '/kati/')
 
         home = self.browser.find_element_by_link_text("Home").text
         self.assertIn('Home', home)
@@ -81,20 +92,24 @@ class NewVisitorTest(unittest.TestCase):
         #เพราะเป็นครั้งแรกในการใช้งาน กะทิจึงอยากรู้ว่า web application นี้สามารถทำอะไรได้บ้างจึงเข้าไปที่เมนู about
         about = self.browser.find_element_by_link_text('About')
         self.assertIn('About', about.text)
-        
         about.click()
         time.sleep(2)
+        current_url = self.browser.current_url
+        self.assertRegex(current_url, '/kati/about/')
 
         #กะทิต้องการเพิ่มหนังสือเล่มใหม่ลงใน web application จึงกดที่ Add new 
         addnew = self.browser.find_element_by_link_text('Add new')
         self.assertIn('Add new', addnew.text)
         addnew.click()
-        time.sleep(5)
-
+        time.sleep(2)
+        current_url = self.browser.current_url
+        self.assertRegex(current_url, '/kati/newbook/')
         title = self.browser.find_element_by_name('title')
         title.send_keys('aaa')
         author = self.browser.find_element_by_name('author')
         author.send_keys('bbb')
+        
+
         time.sleep(2)
         myfile = self.browser.find_element_by_name("myfile").click()
         time.sleep(10)
@@ -105,9 +120,12 @@ class NewVisitorTest(unittest.TestCase):
         #หน้าเว็บเพจเปลี่ยนกลับไปเป็นหน้าโฮม กะทิพบว่าหนังสือที่เธอเพิ่มไปนั้นปรากฏอยู่ที่ New Release เธอจึงกดเข้าไปที่หนังสือเล่มนั้น
         #กะทิพบว่าหน้าเว็บเปลี่ยนไปแสดงรายละเอียดต่างๆของหนังสือ
         
-        
+        current_url = self.browser.current_url
+        self.assertRegex(current_url, '/kati/')
         book = self.browser.find_element_by_name("aaa").click()
         time.sleep(2)
+
+        
         title = self.browser.find_element_by_name('title').text
         self.assertIn('aaa', title)
         author = self.browser.find_element_by_name('author').text
@@ -143,16 +161,19 @@ class NewVisitorTest(unittest.TestCase):
 
         time.sleep(3)
         
+        
         #กะทิลองกดไปที่เมนูที่ชื่อว่า All books ซึ่งทำให้พบกับรายชื่อหนังสือทุกเล่มที่เธอมี
         allbooks = self.browser.find_element_by_link_text("All books").click()
         time.sleep(3)
+        current_url = self.browser.current_url
+        self.assertRegex(current_url, '/kati/cat/Allbooks/')
         pcat = self.browser.find_element_by_name('pcat').text
         self.assertIn('My Bookshelf : Allbooks', pcat)
 
         #เมื่อลองกดที่ category ก็พบ droped down menu เธอจึงกดที่ Novel ทำให้พบกับรายชื่อหนังสือทุกเล่มที่เป็นประเภท Novel ที่เธอมี
         cat = self.browser.find_element_by_name("cat").click()
         time.sleep(3)
-        novel = self.browser.find_element_by_name("Novel").click()
+        novel = self.browser.find_element_by_name("novel").click()
         time.sleep(3)
         pcat = self.browser.find_element_by_name('pcat').text
         self.assertIn('My Bookshelf : Novel', pcat)

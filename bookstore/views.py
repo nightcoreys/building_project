@@ -166,7 +166,7 @@ def addnewbook(request,user_name):
             new_cat = request.POST.get('cat')
             myfile = request.FILES['myfile']
             
-            if new_cat!="null":
+            if new_cat!=None:
                 if new_cat=="others":
                     new_cate = request.POST.get('catt')
                     check_cate = Category.objects.filter(name=new_cate,owner=user_name).count()
@@ -201,7 +201,7 @@ def addnewbook(request,user_name):
         'choice_cat':choice_cat,
         'user_name' : user_name,
     }
-    template = loader.get_template('bookstore/addnewbook.html')
+    template = loader.get_template('bookstore/newbook.html')
     return HttpResponse(template.render(context, request))
 
 def index(request):
